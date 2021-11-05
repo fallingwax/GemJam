@@ -64,17 +64,24 @@ public class Main extends Application {
     int currentScore;
     int gemCount;
     int currentLevel;
+    int curX;
+    int curY;
 
-    Gem[][] grid = new Gem[BOARD_WIDTH][BOARD_HEIGHT];
+    Board board = new Board();
     Gem gem1;
     Gem gem2;
     Gem gem3;
+    Gem bottom;
+    Gem middle;
+    Gem top;
+
     boolean isFalling = false;
     boolean isKeyPressed = false;
     boolean game = true;
     boolean paused = false;
     boolean destroyComplete;
     boolean isChristmasTheme = false;
+
     int matchedThreeMultiplier = 1;
     long timestamp;
     long prevTimestamp;
@@ -204,41 +211,34 @@ public class Main extends Application {
     }
 
     private void moveLeft() {
-        int curX = 0;
-        int curY = 0;
-        Gem bottom = null;
-        Gem middle = null;
-        Gem top = null;
-        for (Gem gem : currentGems) {
-            if (gem.getPosition() == 2) {
-                curX = (int) gem.imageView.getLayoutX() / GEM_SIZE;
-                curY = (int) gem.imageView.getLayoutX() / GEM_SIZE;
-                bottom = gem;
-            }
-            if (gem.getPosition() == 1) {
-                middle = gem;
-            }
-            if (gem.getPosition() == 0) {
-                top = gem;
-            }
-        }
-        if (curX > 0) {
-            if (grid[curX - 1][curY].getColorId() == 0) {
-                bottom.imageView.setLayoutX(bottom.imageView.getLayoutX() - GEM_SIZE);
-                middle.imageView.setLayoutX(middle.imageView.getLayoutX() - GEM_SIZE);
-                top.imageView.setLayoutX(top.imageView.getLayoutX() - GEM_SIZE);
-            }
+        setGems(currentGems);
+        if (Board.checkLeft(curX, curY)) {
+            bottom.imageView.setLayoutX(bottom.imageView.getLayoutX() - GEM_SIZE);
+            middle.imageView.setLayoutX(middle.imageView.getLayoutX() - GEM_SIZE);
+            top.imageView.setLayoutX(top.imageView.getLayoutX() - GEM_SIZE);
         }
     }
 
-
     private void moveRight() {
-        int curX = 0;
-        int curY = 0;
-        Gem bottom = null;
-        Gem middle = null;
-        Gem top = null;
-        for (Gem gem : currentGems) {
+        setGems(currentGems);
+        if (Board.checkRight(curX,curY)) {
+                bottom.imageView.setLayoutX(bottom.imageView.getLayoutX() + GEM_SIZE);
+                middle.imageView.setLayoutX(middle.imageView.getLayoutX() + GEM_SIZE);
+                top.imageView.setLayoutX(top.imageView.getLayoutX() + GEM_SIZE);
+            }
+        }
+
+//    private void moveDown() {
+//        setGems(currentGems);
+//        bottom.imageView.relocate(bottom.imageView.getLayoutX(),bottom.imageView.getLayoutY() + GEM_SIZE);
+//        middle.imageView.relocate(middle.imageView.getLayoutX(),middle.imageView.getLayoutY() + GEM_SIZE);
+//        top.imageView.relocate(top.imageView.getLayoutX(), top.imageView.getLayoutY() + GEM_SIZE);
+//    }
+
+    private void setGems(List<Gem> gemList) {
+        curX = 0;
+        curY = 0;
+        for (Gem gem : gemList) {
             if (gem.getPosition() == 2) {
                 curX = (int) gem.imageView.getLayoutX() / GEM_SIZE;
                 curY = (int) gem.imageView.getLayoutY() / GEM_SIZE;
@@ -251,137 +251,17 @@ public class Main extends Application {
                 top = gem;
             }
         }
-        if (curX < BOARD_WIDTH - 1) {
-            if (grid[curX + 1][curY].getColorId() == 0) {
-                bottom.imageView.setLayoutX(bottom.imageView.getLayoutX() + GEM_SIZE);
-                middle.imageView.setLayoutX(middle.imageView.getLayoutX() + GEM_SIZE);
-                top.imageView.setLayoutX(top.imageView.getLayoutX() + GEM_SIZE);
-            }
-        }
     }
 
-
     private void checkMatches() {
-        redrawBoard();
-        for (int x = 0; x < grid.length; x++) {
-            for (int y = 0; y < grid[x].length; y++) {
-                if (matches.contains(grid[x][y]))
-                    //check if we already cell to the list
-                    continue;
-
-                //check if colorId != 0
-                if (grid[x][y].getColorId() != 0) {
-                    //check down for 3 matches
-                    if (y + 1 < BOARD_HEIGHT && grid[x][y].getColorId() == grid[x][y + 1].getColorId()) {
-                        if (y + 2 < BOARD_HEIGHT && grid[x][y].getColorId() == grid[x][y + 2].getColorId()) {
-                            matches.add(grid[x][y]);
-                            matches.add(grid[x][y + 1]);
-                            matches.add(grid[x][y + 2]);
-                            grid[x][y].setDestory();
-                            grid[x][y + 1].setDestory();
-                            grid[x][y + 2].setDestory();
-                            System.out.println("three down");
-                            if (y + 3 < BOARD_HEIGHT) {
-                                if (grid[x][y].getColorId() == grid[x][y + 3].getColorId()) {
-                                    matches.add(grid[x][y + 3]);
-                                    grid[x][y + 3].setDestory();
-                                    if (y + 4 < BOARD_HEIGHT) {
-                                        if (grid[x][y].getColorId() == grid[x][y + 4].getColorId()) {
-                                            matches.add(grid[x][y + 4]);
-                                            grid[x][y + 4].setDestory();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                        //check right for 3 matches
-                        if (x + 1 < BOARD_WIDTH && grid[x][y].getColorId() == grid[x + 1][y].getColorId()) {
-                            if (x + 2 < BOARD_WIDTH && grid[x][y].getColorId() == grid[x + 2][y].getColorId()) {
-                                matches.add(grid[x][y]);
-                                matches.add(grid[x + 1][y]);
-                                matches.add(grid[x + 2][y]);
-                                grid[x][y].setDestory();
-                                grid[x + 1][y].setDestory();
-                                grid[x + 2][y].setDestory();
-                                System.out.println("three across");
-                                if (x + 3 < BOARD_WIDTH) {
-                                    if (grid[x][y].getColorId() == grid[x + 3][y].getColorId()) {
-                                        matches.add(grid[x + 3][y]);
-                                        grid[x + 3][y].setDestory();
-                                        if (x + 4 < BOARD_WIDTH) {
-                                            if (grid[x][y].getColorId() == grid[x + 4][y].getColorId()) {
-                                                matches.add(grid[x + 4][y]);
-                                                grid[x + 4][y].setDestory();
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        //check down right diagonal for 3 matches
-                        if (y + 1 < BOARD_HEIGHT && x + 1 < BOARD_WIDTH && grid[x][y].getColorId() == grid[x + 1][y + 1].getColorId()) {
-                            if (y + 2 < BOARD_HEIGHT && x + 2 < BOARD_WIDTH && grid[x][y].getColorId() == grid[x + 2][y + 2].getColorId()) {
-                                matches.add(grid[x][y]);
-                                matches.add(grid[x + 1][y + 1]);
-                                matches.add(grid[x + 2][y + 2]);
-                                grid[x][y].setDestory();
-                                grid[x + 1][y + 1].setDestory();
-                                grid[x + 2][y + 2].setDestory();
-                                System.out.println("three down right");
-                                if (x + 3 < BOARD_WIDTH && y + 3 < BOARD_HEIGHT) {
-                                    if (grid[x][y].getColorId() == grid[x + 3][y + 3].getColorId()) {
-                                        matches.add(grid[x + 3][y + 3]);
-                                        grid[x + 3][y + 3].setDestory();
-                                        if (x + 4 < BOARD_WIDTH && y + 4 < BOARD_HEIGHT) {
-                                            if (grid[x][y].getColorId() == grid[x + 4][y + 4].getColorId()) {
-                                                matches.add(grid[x + 4][y + 4]);
-                                                grid[x + 4][y + 4].setDestory();
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        //check down left diagonal for 3 matches
-                        if (y + 1 < BOARD_HEIGHT && x - 1 < BOARD_WIDTH && x - 1 >= 0 && grid[x][y].getColorId() == grid[x - 1][y + 1].getColorId()) {
-                            if (y + 2 < BOARD_HEIGHT && x - 2 < BOARD_WIDTH && x - 2 >= 0 && grid[x][y].getColorId() == grid[x - 2][y + 2].getColorId()) {
-                                matches.add(grid[x][y]);
-                                matches.add(grid[x - 1][y + 1]);
-                                matches.add(grid[x - 2][y + 2]);
-                                grid[x][y].setDestory();
-                                grid[x - 1][y + 1].setDestory();
-                                grid[x - 2][y + 2].setDestory();
-                                System.out.println("three down left");
-                                if (x - 3 >= 0 && y + 3 < BOARD_HEIGHT) {
-                                    if (grid[x][y].getColorId() == grid[x - 3][y + 3].getColorId()) {
-                                        matches.add(grid[x - 3][y + 3]);
-                                        grid[x - 3][y + 3].setDestory();
-                                        if (x - 4 >= 0 && y + 4 < BOARD_HEIGHT) {
-                                            if (grid[x][y].getColorId() == grid[x - 4][y + 4].getColorId()) {
-                                                matches.add(grid[x - 4][y + 4]);
-                                                grid[x - 4][y + 4].setDestory();
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-
+        List<Gem> matches = board.getMatches();
 
         if (matches.size() >= 3) {
-            for (int x = 0; x < grid.length; x++) {
-                for (int y = 0; y < grid[x].length; y++) {
-                    if (grid[x][y].destroy) {
-                        destroyGem(grid[x][y]);
-                        grid[x][y] = new Gem(0, 0, 0);
+            for (int x = 0; x < board.grid.length; x++) {
+                for (int y = 0; y < board.grid[x].length; y++) {
+                    if (board.grid[x][y].destroy) {
+                        destroyGem(board.grid[x][y]);
+                        board.grid[x][y] = new Gem(0, 0, 0);
                         currentScore += 50 * matchedThreeMultiplier * currentLevel;
                         currentScoreLabel.setText(currentScore + "");
                         gemCount++;
@@ -398,7 +278,7 @@ public class Main extends Application {
             matchedThreeMultiplier += 2;
 
         } else {
-            redrawBoard();
+            board.redrawBoard();
             makeNewColumn(pane);
             matchedThreeMultiplier = 1;
         }
@@ -431,7 +311,7 @@ public class Main extends Application {
                 if (matches.size() == 1) {
                     matches.remove(gem);
                     destroyComplete = true;
-                    redrawBoard();
+                    board.redrawBoard();
                     checkMatches();
                 } else {
                     matches.remove(gem);
@@ -458,7 +338,7 @@ public class Main extends Application {
         if (bottom.getPosition() == 2) {
 
             //check if there is a gem below or if we are at the bottom
-            if (bottom.imageView.getLayoutY() / GEM_SIZE < BOARD_HEIGHT - 1 && grid[(int) bottom.imageView.getLayoutX() / GEM_SIZE][(int) bottom.imageView.getLayoutY() / GEM_SIZE + 1].getColorId() > 0) {
+            if (bottom.imageView.getLayoutY() / GEM_SIZE < BOARD_HEIGHT - 1 && board.grid[(int) bottom.imageView.getLayoutX() / GEM_SIZE][(int) bottom.imageView.getLayoutY() / GEM_SIZE + 1].getColorId() > 0) {
                 //check for game over
                 if (bottom.imageView.getLayoutY() / GEM_SIZE - 2 <= 0) {
                     System.out.println("game over");
@@ -474,7 +354,7 @@ public class Main extends Application {
         }
         //bottom is in the middle
         else if (bottom.getPosition() == 0) {
-            if (bottom.imageView.getLayoutY() / GEM_SIZE < BOARD_HEIGHT - 3 && grid[(int) bottom.imageView.getLayoutX() / GEM_SIZE][(int) bottom.imageView.getLayoutY() / GEM_SIZE + 3].getColorId() > 0) {
+            if (bottom.imageView.getLayoutY() / GEM_SIZE < BOARD_HEIGHT - 3 && board.grid[(int) bottom.imageView.getLayoutX() / GEM_SIZE][(int) bottom.imageView.getLayoutY() / GEM_SIZE + 3].getColorId() > 0) {
                 //check for game over
                 if (bottom.imageView.getLayoutY() / GEM_SIZE - 1 <= 0) {
                     game = false;
@@ -489,7 +369,7 @@ public class Main extends Application {
         }
         //bottom is at the top
         else {
-            if (bottom.imageView.getLayoutY() / GEM_SIZE < BOARD_HEIGHT - 2 && grid[(int) bottom.imageView.getLayoutX() / GEM_SIZE][(int) bottom.imageView.getLayoutY() / GEM_SIZE + 2].getColorId() > 0) {
+            if (bottom.imageView.getLayoutY() / GEM_SIZE < BOARD_HEIGHT - 2 && board.grid[(int) bottom.imageView.getLayoutX() / GEM_SIZE][(int) bottom.imageView.getLayoutY() / GEM_SIZE + 2].getColorId() > 0) {
                 //check for game over
                 if (bottom.imageView.getLayoutY() / GEM_SIZE <= 0) {
                     game = false;
@@ -511,7 +391,7 @@ public class Main extends Application {
         }
         isFalling = false;
         pause();
-        setGridPositions();
+        board.setGridPositions(currentGems);
         checkMatches();
     }
 
@@ -598,58 +478,47 @@ public class Main extends Application {
         sidePanel.add(currentLevelLabel,0,5);
 
 
-        fillArray();
-        redrawBoard();
+        board.redrawBoard();
         game = true;
         gameTimer.start();
         createColumn();
         pane.getChildren().addAll(gem1.imageView, gem2.imageView, gem3.imageView);
     }
 
-    private void redrawBoard() {
-        pane.getChildren().clear();
-        for (int x = 0; x < BOARD_WIDTH; x++) {
-            for (int y = 0; y < BOARD_HEIGHT - 1; y++) {
-                if (grid[x][y].getColorId() > 0) {
-                    if (grid[x][y + 1].getColorId() == 0) {
-                        grid[x][y + 1] = grid[x][y];
-                        grid[x][y] = new Gem(0, 0, 0);
-                    }
-                }
-            }
-        }
-
-        for (int x = 0; x < grid.length; x++) {
-            for (int y = 0; y < grid[x].length; y++) {
-                if (grid[x][y].getColorId() > 0) {
-//                    System.out.println("gem " + grid[x][y].getColorId() + " color, should move to x:" + x + " y:" + y);
-                    grid[x][y].imageView.relocate(x * GEM_SIZE, y * GEM_SIZE);
-                    pane.getChildren().add(grid[x][y].imageView);
-                }
-            }
-        }
-    }
+//    private void redrawBoard() {
+//        pane.getChildren().clear();
+//        for (int x = 0; x < BOARD_WIDTH; x++) {
+//            for (int y = 0; y < BOARD_HEIGHT - 1; y++) {
+//                if (grid[x][y].getColorId() > 0) {
+//                    if (grid[x][y + 1].getColorId() == 0) {
+//                        grid[x][y + 1] = grid[x][y];
+//                        grid[x][y] = new Gem(0, 0, 0);
+//                    }
+//                }
+//            }
+//        }
+//
+//        for (int x = 0; x < grid.length; x++) {
+//            for (int y = 0; y < grid[x].length; y++) {
+//                if (grid[x][y].getColorId() > 0) {
+////                    System.out.println("gem " + grid[x][y].getColorId() + " color, should move to x:" + x + " y:" + y);
+//                    grid[x][y].imageView.relocate(x * GEM_SIZE, y * GEM_SIZE);
+//                    pane.getChildren().add(grid[x][y].imageView);
+//                }
+//            }
+//        }
+//    }
 
     private void drop() {
-        Gem bottom = null;
-        Gem middle = null;
-        Gem top = null;
+
         int emptyY = 0;
 
         //set the gem order
-        for (Gem gem : currentGems) {
-            if (gem.getInitialPosition() == 2) {
-                bottom = gem;
-            }
-            else if(gem.getInitialPosition() == 1) {
-                middle = gem;
-            } else {
-                top = gem;
-            }
-        }
+        setGems(currentGems);
+
         //check the next empty Y coordinate
-        for (int y = 0; y < grid[(int)bottom.imageView.getLayoutX() / GEM_SIZE].length; y++) {
-            if (grid[(int)bottom.imageView.getLayoutX() / GEM_SIZE][y].getColorId() == 0) {
+        for (int y = 0; y < board.grid[(int)bottom.imageView.getLayoutX() / GEM_SIZE].length; y++) {
+            if (board.grid[(int)bottom.imageView.getLayoutX() / GEM_SIZE][y].getColorId() == 0) {
                 emptyY = y;
             }
         }
@@ -714,39 +583,39 @@ public class Main extends Application {
         paused = false;
     }
 
-    private void setGridPositions() {
-        //gem1 is at the
-//        System.out.println(gem1.getPosition());
-        if (gem1.getPosition() == 0) {
-            grid[(int) gem1.imageView.getLayoutX() / GEM_SIZE][(int) gem1.imageView.getLayoutY() / GEM_SIZE] = gem1;
-            grid[(int) gem2.imageView.getLayoutX() / GEM_SIZE][(int) gem2.imageView.getLayoutY() / GEM_SIZE - 1] = gem2;
-            grid[(int) gem3.imageView.getLayoutX() / GEM_SIZE][(int) gem3.imageView.getLayoutY() / GEM_SIZE - 2] = gem3;
-        }
-        //gem1 is in the middle
-        else if (gem1.getPosition() == 1) {
-            grid[(int) gem1.imageView.getLayoutX() / GEM_SIZE][(int) gem1.imageView.getLayoutY() / GEM_SIZE] = gem1;
-            grid[(int) gem2.imageView.getLayoutX() / GEM_SIZE][(int) gem2.imageView.getLayoutY() / GEM_SIZE - 1] = gem2;
-            grid[(int) gem3.imageView.getLayoutX() / GEM_SIZE][(int) gem3.imageView.getLayoutY() / GEM_SIZE - 2] = gem3;
-        } else
-        //gem1 is at the bottom
-        {
-            grid[(int) gem1.imageView.getLayoutX() / GEM_SIZE][(int) gem1.imageView.getLayoutY() / GEM_SIZE] = gem1;
-            grid[(int) gem2.imageView.getLayoutX() / GEM_SIZE][(int) gem2.imageView.getLayoutY() / GEM_SIZE - 1] = gem2;
-            grid[(int) gem3.imageView.getLayoutX() / GEM_SIZE][(int) gem3.imageView.getLayoutY() / GEM_SIZE - 2] = gem3;
-        }
-    }
+//    private void setGridPositions() {
+//        //gem1 is at the
+////        System.out.println(gem1.getPosition());
+//        if (gem1.getPosition() == 0) {
+//            grid[(int) gem1.imageView.getLayoutX() / GEM_SIZE][(int) gem1.imageView.getLayoutY() / GEM_SIZE] = gem1;
+//            grid[(int) gem2.imageView.getLayoutX() / GEM_SIZE][(int) gem2.imageView.getLayoutY() / GEM_SIZE - 1] = gem2;
+//            grid[(int) gem3.imageView.getLayoutX() / GEM_SIZE][(int) gem3.imageView.getLayoutY() / GEM_SIZE - 2] = gem3;
+//        }
+//        //gem1 is in the middle
+//        else if (gem1.getPosition() == 1) {
+//            grid[(int) gem1.imageView.getLayoutX() / GEM_SIZE][(int) gem1.imageView.getLayoutY() / GEM_SIZE] = gem1;
+//            grid[(int) gem2.imageView.getLayoutX() / GEM_SIZE][(int) gem2.imageView.getLayoutY() / GEM_SIZE - 1] = gem2;
+//            grid[(int) gem3.imageView.getLayoutX() / GEM_SIZE][(int) gem3.imageView.getLayoutY() / GEM_SIZE - 2] = gem3;
+//        } else
+//        //gem1 is at the bottom
+//        {
+//            grid[(int) gem1.imageView.getLayoutX() / GEM_SIZE][(int) gem1.imageView.getLayoutY() / GEM_SIZE] = gem1;
+//            grid[(int) gem2.imageView.getLayoutX() / GEM_SIZE][(int) gem2.imageView.getLayoutY() / GEM_SIZE - 1] = gem2;
+//            grid[(int) gem3.imageView.getLayoutX() / GEM_SIZE][(int) gem3.imageView.getLayoutY() / GEM_SIZE - 2] = gem3;
+//        }
+//    }
 
-    private void fillArray() {
-        for (int x = 0; x < grid.length; x++)
-            for (int y = 0; y < grid[x].length; y++)
-                grid[x][y] = new Gem(0,0,0);
-    }
+//    private void fillArray() {
+//        for (int x = 0; x < grid.length; x++)
+//            for (int y = 0; y < grid[x].length; y++)
+//                grid[x][y] = new Gem(0,0,0);
+//    }
 
-    private void printArray() {
-        for (int x = 0; x < grid.length; x++)
-            for (int y = 0; y < grid[x].length; y++)
-                System.out.println("x= " + x + " y=" + y + " Position: " + grid[x][y].position + " Color: " + grid[x][y].getColorId() + " Destroy:" + grid[x][y].destroy);
-    }
+//    private void printArray() {
+//        for (int x = 0; x < grid.length; x++)
+//            for (int y = 0; y < grid[x].length; y++)
+//                System.out.println("x= " + x + " y=" + y + " Position: " + grid[x][y].position + " Color: " + grid[x][y].getColorId() + " Destroy:" + grid[x][y].destroy);
+//    }
 
     public void sortGems(){
 //        System.out.println(gem1.getPosition());
