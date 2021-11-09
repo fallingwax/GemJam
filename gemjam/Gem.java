@@ -1,4 +1,4 @@
-package sample;
+package gemjam;
 
 
 import javafx.embed.swing.SwingFXUtils;
@@ -44,7 +44,7 @@ public class Gem {
         this.position = position;
         this.initialPosition = position;
         Random random = new Random();
-        int rnd = random.nextInt(6);
+        int rnd = random.nextInt(3);
         color = colors.get(rnd);
         if (!christmas) {
             if (color == Color.RED) {
@@ -54,27 +54,27 @@ public class Gem {
                 imageView = new ImageView(image);
             } else if (color == Color.BLUE) {
                 id = 2;
-                bufferedImage = Sprite.getSprite(1, 0);
+                bufferedImage = Sprite.getSprite(3, 1);
                 image = SwingFXUtils.toFXImage(bufferedImage, null);
                 imageView = new ImageView(image);
             } else if (color == Color.ORANGE) {
                 id = 3;
-                bufferedImage = Sprite.getSprite(0, 0);
+                bufferedImage = Sprite.getSprite(0, 1);
                 image = SwingFXUtils.toFXImage(bufferedImage, null);
                 imageView = new ImageView(image);
             } else if (color == Color.GREEN) {
                 id = 4;
-                bufferedImage = Sprite.getSprite(3, 0);
+                bufferedImage = Sprite.getSprite(1, 0);
                 image = SwingFXUtils.toFXImage(bufferedImage, null);
                 imageView = new ImageView(image);
             } else if (color == Color.PURPLE) {
                 id = 5;
-                bufferedImage = Sprite.getSprite(0, 1);
+                bufferedImage = Sprite.getSprite(0, 0);
                 image = SwingFXUtils.toFXImage(bufferedImage, null);
                 imageView = new ImageView(image);
             } else {
                 id = 6;
-                bufferedImage = Sprite.getSprite(3, 1);
+                bufferedImage = Sprite.getSprite(3, 0);
                 image = SwingFXUtils.toFXImage(bufferedImage, null);
                 imageView = new ImageView(image);
             }

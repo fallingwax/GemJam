@@ -1,4 +1,4 @@
-package sample;
+package gemjam;
 
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -18,7 +18,6 @@ public class SettingsPane {
     CheckBox set_christmas = new CheckBox();
 
     ImageView arrow_down = new ImageView(new Image("/res/keys/arrow down.png"));
-    ImageView arrow_left = new ImageView( new Image("/res/keys/arrow left.png"));
     ImageView arrow_right = new ImageView(new Image("/res/keys/arrow right.png"));
     ImageView arrow_up =  new ImageView(new Image("/res/keys/arrow up.png"));
     ImageView space =  new ImageView(new Image("/res/keys/space.png"));
@@ -32,7 +31,6 @@ public class SettingsPane {
 
     Label downLabel = new Label("Enter Initials - Change letter Down");
     Label upLabel = new Label("Enter Initials - Change letter Up");
-    Label leftLabel = new Label("Enter Initials - Move back");
     Label rightLabel = new Label("Enter Initials - Move forward");
     Label spaceLabel = new Label("Sort gems");
     Label ctrlLabel = new Label("Pause game");
@@ -71,10 +69,6 @@ public class SettingsPane {
             setLastRow(row + 1);
         }
 
-        map.forEach((k,v) -> {
-            ;
-        });
-
         soundLabel.getStyleClass().add("settings-label");
         fxLabel.getStyleClass().add("settings-label");
         christmasLabel.getStyleClass().add("settings-label");
@@ -91,7 +85,6 @@ public class SettingsPane {
     public void setMap() {
         map.put(downLabel,arrow_down);
         map.put(upLabel,arrow_up);
-        map.put(leftLabel,arrow_left);
         map.put(rightLabel,arrow_right);
         map.put(spaceLabel,space);
         map.put(ctrlLabel,ctrl);

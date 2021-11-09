@@ -1,10 +1,8 @@
-package sample;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+package gemjam;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class Sprite {
 
@@ -16,7 +14,7 @@ public class Sprite {
         BufferedImage sprite = null;
 
         try {
-            sprite = ImageIO.read(new File("C:\\Users\\david\\IdeaProjects\\Columns\\src\\sample\\gems2.png"));
+            sprite = ImageIO.read(Sprite.class.getResource("gems2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

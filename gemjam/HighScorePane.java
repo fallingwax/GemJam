@@ -1,4 +1,4 @@
-package sample;
+package gemjam;
 
 import com.google.gson.Gson;
 import javafx.scene.control.Label;
@@ -129,7 +129,6 @@ public class HighScorePane {
     public GridPane newHighScore() {
         setInitialsPane = new GridPane();
         setInitialsPane.setMinSize(240,80);
-
         setInitialsPane.add(firstInitial,0,0);
         setInitialsPane.add(secondInitial,1,0);
         setInitialsPane.add(thirdInitial,2,0);
@@ -140,22 +139,14 @@ public class HighScorePane {
 
     }
 
-    public Label getNextLabel() {
+    public Label getNextLabel(int score) {
+        initials.get(labelCount).getStyleClass().add("yellow");
         labelCount++;
         if(labelCount > 2) {
-            labelCount = 0;
+            return null;
+        } else {
+            return initials.get(labelCount);
         }
-        i = 0;
-        return initials.get(labelCount);
-    }
-
-    public Label getPreviousLabel() {
-        labelCount--;
-        if(labelCount < 0) {
-            labelCount = 2;
-        }
-        i = 0;
-        return initials.get(labelCount);
     }
 
     public Label getFirstInitial() {

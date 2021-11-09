@@ -1,4 +1,4 @@
-package sample;
+package gemjam;
 
 
 import java.util.ArrayList;
@@ -10,16 +10,19 @@ public class Board {
     final static int BOARD_HEIGHT = 13;
     final static int GEM_SIZE = 80;
 
-    static Gem[][] grid = new Gem[BOARD_WIDTH][BOARD_HEIGHT];
+    Gem[][] grid;
+    List<Gem> matches;
 
     public Board() {
+        grid = new Gem[BOARD_WIDTH][BOARD_HEIGHT];
         fillArray();
+        matches = new ArrayList<>();
     }
 
     /**
      * fill grid with empty Gems
      */
-    private static void fillArray() {
+    private void fillArray() {
         for (int x = 0; x < grid.length; x++)
             for (int y = 0; y < grid[x].length; y++)
                 grid[x][y] = new Gem(0, 0, 0);
@@ -30,7 +33,7 @@ public class Board {
      *
      * @param gemList
      */
-    public static void setGridPositions(List<Gem> gemList) {
+    public void setGridPositions(List<Gem> gemList, int y) {
         Gem gem1 = null;
         Gem gem2 = null;
         Gem gem3 = null;
@@ -45,24 +48,35 @@ public class Board {
                 gem3 = gem;
             }
         }
-        //gem1 is at the
+
+        int x = (int) gem1.imageView.getLayoutX() / GEM_SIZE;
+
+        //gem1 is at the top
         if (gem1.getPosition() == 0) {
-            grid[(int) gem1.imageView.getLayoutX() / GEM_SIZE][(int) gem1.imageView.getLayoutY() / GEM_SIZE] = gem1;
-            grid[(int) gem2.imageView.getLayoutX() / GEM_SIZE][(int) gem2.imageView.getLayoutY() / GEM_SIZE - 1] = gem2;
-            grid[(int) gem3.imageView.getLayoutX() / GEM_SIZE][(int) gem3.imageView.getLayoutY() / GEM_SIZE - 2] = gem3;
+            grid[x][y] = gem2;
+            grid[x][y - 1] = gem3;
+            grid[x][y - 2] = gem1;
         }
         //gem1 is in the middle
         else if (gem1.getPosition() == 1) {
-            grid[(int) gem1.imageView.getLayoutX() / GEM_SIZE][(int) gem1.imageView.getLayoutY() / GEM_SIZE] = gem1;
-            grid[(int) gem2.imageView.getLayoutX() / GEM_SIZE][(int) gem2.imageView.getLayoutY() / GEM_SIZE - 1] = gem2;
-            grid[(int) gem3.imageView.getLayoutX() / GEM_SIZE][(int) gem3.imageView.getLayoutY() / GEM_SIZE - 2] = gem3;
+            grid[x][y] = gem3;
+            grid[x][y - 1] = gem1;
+            grid[x][y - 2] = gem2;
         } else
         //gem1 is at the bottom
         {
-            System.out.println((int) gem2.imageView.getLayoutY() / GEM_SIZE);
-            grid[(int) gem1.imageView.getLayoutX() / GEM_SIZE][(int) gem1.imageView.getLayoutY() / GEM_SIZE] = gem1;
-            grid[(int) gem2.imageView.getLayoutX() / GEM_SIZE][(int) gem2.imageView.getLayoutY() / GEM_SIZE - 2] = gem2;
-            grid[(int) gem3.imageView.getLayoutX() / GEM_SIZE][(int) gem3.imageView.getLayoutY() / GEM_SIZE - 3] = gem3;
+            grid[x][y] = gem1;
+            grid[x][y - 1] = gem2;
+            grid[x][y - 2] = gem3;;
+        }
+//        printArray();
+    }
+
+    public boolean checkTop(int x, int y) {
+        if (y <= 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -73,7 +87,7 @@ public class Board {
      * @param y
      * @return true if the element below is empty
      */
-    public static boolean checkDown(int x, int y) {
+    public boolean checkDown(int x, int y) {
         if (y + 1 == BOARD_HEIGHT) {
             return false;
         } else if (grid[x][y + 1].getColorId() > 0) {
@@ -88,9 +102,9 @@ public class Board {
      *
      * @param x
      * @param y
-     * @return true if the element to the left is empty
+     * @return boolean
      */
-    public static boolean checkLeft(int x, int y) {
+    public boolean checkLeft(int x, int y) {
         if (x - 1 < 0) {
             return false;
         } else if (grid[x - 1][y].getColorId() > 0) {
@@ -107,7 +121,7 @@ public class Board {
      * @param y
      * @true if the element to the right is empty
      */
-    public static boolean checkRight(int x, int y) {
+    public boolean checkRight(int x, int y) {
         if (x + 1 == BOARD_WIDTH) {
             return false;
         } else if (grid[x + 1][y].getColorId() > 0) {
@@ -121,7 +135,7 @@ public class Board {
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_HEIGHT - 1; y++) {
                 if (grid[x][y].getColorId() > 0) {
-                    if (!checkDown(x, y)) {
+                    if (checkDown(x, y)) {
                         grid[x][y + 1] = grid[x][y];
                         grid[x][y] = new Gem(0, 0, 0);
                     }
@@ -139,8 +153,6 @@ public class Board {
     }
 
     public List<Gem> getMatches() {
-        redrawBoard();
-        List<Gem> matches = new ArrayList<>();
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[x].length; y++) {
                 if (matches.contains(grid[x][y]))
@@ -155,17 +167,12 @@ public class Board {
                             matches.add(grid[x][y]);
                             matches.add(grid[x][y + 1]);
                             matches.add(grid[x][y + 2]);
-                            grid[x][y].setDestory();
-                            grid[x][y + 1].setDestory();
-                            grid[x][y + 2].setDestory();
                             if (y + 3 < BOARD_HEIGHT) {
                                 if (grid[x][y].getColorId() == grid[x][y + 3].getColorId()) {
                                     matches.add(grid[x][y + 3]);
-                                    grid[x][y + 3].setDestory();
                                     if (y + 4 < BOARD_HEIGHT) {
                                         if (grid[x][y].getColorId() == grid[x][y + 4].getColorId()) {
                                             matches.add(grid[x][y + 4]);
-                                            grid[x][y + 4].setDestory();
                                         }
                                     }
                                 }
@@ -179,17 +186,12 @@ public class Board {
                             matches.add(grid[x][y]);
                             matches.add(grid[x + 1][y]);
                             matches.add(grid[x + 2][y]);
-                            grid[x][y].setDestory();
-                            grid[x + 1][y].setDestory();
-                            grid[x + 2][y].setDestory();
                             if (x + 3 < BOARD_WIDTH) {
                                 if (grid[x][y].getColorId() == grid[x + 3][y].getColorId()) {
                                     matches.add(grid[x + 3][y]);
-                                    grid[x + 3][y].setDestory();
                                     if (x + 4 < BOARD_WIDTH) {
                                         if (grid[x][y].getColorId() == grid[x + 4][y].getColorId()) {
                                             matches.add(grid[x + 4][y]);
-                                            grid[x + 4][y].setDestory();
                                         }
                                     }
                                 }
@@ -203,17 +205,12 @@ public class Board {
                             matches.add(grid[x][y]);
                             matches.add(grid[x + 1][y + 1]);
                             matches.add(grid[x + 2][y + 2]);
-                            grid[x][y].setDestory();
-                            grid[x + 1][y + 1].setDestory();
-                            grid[x + 2][y + 2].setDestory();
                             if (x + 3 < BOARD_WIDTH && y + 3 < BOARD_HEIGHT) {
                                 if (grid[x][y].getColorId() == grid[x + 3][y + 3].getColorId()) {
                                     matches.add(grid[x + 3][y + 3]);
-                                    grid[x + 3][y + 3].setDestory();
                                     if (x + 4 < BOARD_WIDTH && y + 4 < BOARD_HEIGHT) {
                                         if (grid[x][y].getColorId() == grid[x + 4][y + 4].getColorId()) {
                                             matches.add(grid[x + 4][y + 4]);
-                                            grid[x + 4][y + 4].setDestory();
                                         }
                                     }
                                 }
@@ -227,17 +224,12 @@ public class Board {
                             matches.add(grid[x][y]);
                             matches.add(grid[x - 1][y + 1]);
                             matches.add(grid[x - 2][y + 2]);
-                            grid[x][y].setDestory();
-                            grid[x - 1][y + 1].setDestory();
-                            grid[x - 2][y + 2].setDestory();
                             if (x - 3 >= 0 && y + 3 < BOARD_HEIGHT) {
                                 if (grid[x][y].getColorId() == grid[x - 3][y + 3].getColorId()) {
-                                    matches.add(grid[x - 3][y + 3]);
-                                    grid[x - 3][y + 3].setDestory();
+                                    matches.add(grid[x - 3][y + 3]);;
                                     if (x - 4 >= 0 && y + 4 < BOARD_HEIGHT) {
                                         if (grid[x][y].getColorId() == grid[x - 4][y + 4].getColorId()) {
                                             matches.add(grid[x - 4][y + 4]);
-                                            grid[x - 4][y + 4].setDestory();
                                         }
                                     }
                                 }
@@ -247,6 +239,20 @@ public class Board {
                 }
             }
         }
+
+        for (Gem gem : matches) {
+            gem.setDestory();
+        }
+
         return matches;
     }
+
+    private void printArray() {
+        for (int x = 0; x < grid.length; x++)
+            for (int y = 0; y < grid[x].length; y++)
+                System.out.println("x= " + x + " y=" + y + " Position: " + grid[x][y].position + " Color: " + grid[x][y].getColorId() + " Destroy:" + grid[x][y].destroy);
+    }
+
+
+
 }

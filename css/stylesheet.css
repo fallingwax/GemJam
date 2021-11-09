@@ -1,5 +1,5 @@
 @font-face {
-    src: url('/sample/Arcade.ttf');
+    src: url('/gemjam/Arcade.ttf');
 }
 
 .stackpane {
@@ -135,4 +135,12 @@
 .action-button-text:hover {
     -fx-font-size: 50;
     -fx-padding: 4;
+}
+
+.yellow {
+    -fx-text-fill: yellow;
+}
+
+.white {
+    -fx-text-fill: white;
 }

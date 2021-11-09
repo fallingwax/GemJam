@@ -1,4 +1,4 @@
-package sample;
+package gemjam;
 /*
     class HighScore
     model of JSON results

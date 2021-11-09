@@ -1,4 +1,4 @@
-package sample;
+package gemjam;
 
 public class Controller {
 }

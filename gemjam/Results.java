@@ -1,4 +1,4 @@
-package sample;
+package gemjam;
 
 import java.util.List;
 
