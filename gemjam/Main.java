@@ -1,12 +1,8 @@
 package gemjam;
 
-import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -20,7 +16,6 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class Main extends Application {
 
@@ -32,7 +27,6 @@ public class Main extends Application {
     Media christmas = new Media(getClass().getResource("/sounds/RushJet1 - XMAS Compilation 2010 - 13 O Holy Night.mp3").toExternalForm());
     Media track;
     MediaPlayer player;
-
 
     final static int BOARD_WIDTH = 6;
     final static int BOARD_HEIGHT = 13;
@@ -59,42 +53,37 @@ public class Main extends Application {
     Gem bottom;
     Gem middle;
     Gem top;
+    Gem nextGem1;
+    Gem nextGem2;
+    Gem nextGem3;
 
     boolean isFalling = false;
     boolean isKeyPressed = false;
-    boolean game = true;
+    boolean game = false;
     boolean paused = false;
     boolean destroyComplete;
     boolean isChristmasTheme = false;
     boolean hasBeenRecorded = false;
+    boolean onHighScore = false;
 
     int matchedThreeMultiplier = 1;
     long timestamp;
     long prevTimestamp;
     int columnCreated = 0;
     List<Gem> gems = new ArrayList<>();
-    List<Gem> currentGems = new ArrayList<Gem>();
+    List<Gem> currentGems = new ArrayList<>();
     List<Gem> matches = new ArrayList<>();
-    TranslateTransition tt;
-    FadeTransition fd;
 
     //Game Loop
     GameTimer gameTimer = new GameTimer(800) {
         @Override
         public void game() {
             if (game) {
-                player.play();
                 moveDown();
-
-            } else {
-
-                gameOver();
 
             }
         }
     };
-
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -107,13 +96,13 @@ public class Main extends Application {
         root.setCenter(sidePanel);
         startScreen();
         scene.setOnKeyPressed((e) -> {
-            if (e.getCode().equals(KeyCode.S)) {
+            if (game && e.getCode().equals(KeyCode.S)) {
                 moveDown();
                 prevTimestamp = timestamp;
                 timestamp = System.currentTimeMillis();
             }
 
-            if (e.getCode().equals(KeyCode.SPACE)) {
+            if (game && e.getCode().equals(KeyCode.SPACE)) {
                 if (!settingsPane.getDisableFX()) {
                     swap.play(1);
                 }
@@ -122,19 +111,19 @@ public class Main extends Application {
                 timestamp = System.currentTimeMillis();
             }
 
-            if (e.getCode().equals(KeyCode.A)) {
+            if (game && e.getCode().equals(KeyCode.A)) {
                 moveLeft();
                 prevTimestamp = timestamp;
                 timestamp = System.currentTimeMillis();
             }
 
-            if (e.getCode().equals(KeyCode.D)) {
+            if (game && e.getCode().equals(KeyCode.D)) {
                 moveRight();
                 prevTimestamp = timestamp;
                 timestamp = System.currentTimeMillis();
             }
 
-            if (e.getCode().equals(KeyCode.W)) {
+            if (game && e.getCode().equals(KeyCode.W)) {
                 drop();
             }
 
@@ -152,66 +141,114 @@ public class Main extends Application {
                 startScreen();
             }
 
-            if (e.getCode().equals(KeyCode.DOWN)) {
+            if (!game && e.getCode().equals(KeyCode.DOWN)) {
                 highScorePane.changeLetterDown(highScorePane.currentInitial());
             }
 
-            if (e.getCode().equals(KeyCode.UP)) {
+            if (!game && e.getCode().equals(KeyCode.UP)) {
                 highScorePane.changeLetterUp(highScorePane.currentInitial());
             }
 
-            if (e.getCode().equals(KeyCode.RIGHT)) {
+            if (!game && e.getCode().equals(KeyCode.RIGHT)) {
                 highScorePane.getNextLabel(currentScore);
             }
 
-            if (!hasBeenRecorded && e.getCode().equals(KeyCode.ENTER)) {
+            if (onHighScore && !hasBeenRecorded && e.getCode().equals(KeyCode.ENTER)) {
                 highScorePane.updateHighScores(currentScore);
                 highScoresScreen();
                 hasBeenRecorded = true;
             }
-
         });
 
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    private void createColumn() {
+    private void createFirstColumn() {
         //0 is top
         gem3 = new Gem(0, -GEM_SIZE * 2, GEM_SIZE, 0,isChristmasTheme);
         //1 is middle
         gem2 = new Gem(0, -GEM_SIZE, GEM_SIZE, 1,isChristmasTheme);
         //2 is bottom
         gem1 = new Gem(0, 0, GEM_SIZE, 2,isChristmasTheme);
+
+        //0 is top
+        nextGem3 = new Gem(0, -GEM_SIZE * 2, GEM_SIZE, 0,isChristmasTheme);
+        //1 is middle
+        nextGem2 = new Gem(0, -GEM_SIZE, GEM_SIZE, 1,isChristmasTheme);
+        //2 is bottom
+        nextGem1 = new Gem(0, 0, GEM_SIZE, 2,isChristmasTheme);
+
+        sidePanel.getGemView().getChildren().addAll(nextGem3.getImageView(), nextGem2.getImageView(), nextGem1.getImageView());
+
         currentGems.add(gem1);
         currentGems.add(gem2);
         currentGems.add(gem3);
     }
 
+    private void createNextColumnm() {
+
+        //copy next set off gems to gem1 - 3
+        gem1 = nextGem1;
+        gem2 = nextGem2;
+        gem3 = nextGem3;
+
+        //adjust gem positions upon entering play field
+        gem1.getImageView().setLayoutY(0);
+        gem2.getImageView().setLayoutY(0);
+        gem3.getImageView().setLayoutY(0);
+        gem1.getImageView().setLayoutX(GEM_SIZE * 2);
+        gem2.getImageView().setLayoutX(GEM_SIZE * 2);
+        gem3.getImageView().setLayoutX(GEM_SIZE * 2);
+
+        //add to current gems
+        currentGems.add(gem1);
+        currentGems.add(gem2);
+        currentGems.add(gem3);
+
+        //create next set off gems
+        //0 is top
+        nextGem3 = new Gem(0, -GEM_SIZE * 2, GEM_SIZE, 0,isChristmasTheme);
+        //1 is middle
+        nextGem2 = new Gem(0, -GEM_SIZE, GEM_SIZE, 1,isChristmasTheme);
+        //2 is bottom
+        nextGem1 = new Gem(0, 0, GEM_SIZE, 2,isChristmasTheme);
+
+        //add them to the side panel
+        sidePanel.getGemView().getChildren().addAll(nextGem3.getImageView(), nextGem2.getImageView(), nextGem1.getImageView());
+
+        //increment column count
+        columnCreated++;
+
+        //add new gems to game
+        pane.getChildren().addAll(gem3.getImageView(), gem2.getImageView(), gem1.getImageView());
+
+    }
+
     private void moveLeft() {
         setGems(currentGems);
         if (board.checkLeft(curX, curY)) {
-            bottom.imageView.setLayoutX(bottom.imageView.getLayoutX() - GEM_SIZE);
-            middle.imageView.setLayoutX(middle.imageView.getLayoutX() - GEM_SIZE);
-            top.imageView.setLayoutX(top.imageView.getLayoutX() - GEM_SIZE);
+            bottom.getImageView().setLayoutX(bottom.getImageView().getLayoutX() - GEM_SIZE);
+            middle.getImageView().setLayoutX(middle.getImageView().getLayoutX() - GEM_SIZE);
+            top.getImageView().setLayoutX(top.getImageView().getLayoutX() - GEM_SIZE);
         }
     }
 
     private void moveRight() {
         setGems(currentGems);
         if (board.checkRight(curX,curY)) {
-                bottom.imageView.setLayoutX(bottom.imageView.getLayoutX() + GEM_SIZE);
-                middle.imageView.setLayoutX(middle.imageView.getLayoutX() + GEM_SIZE);
-                top.imageView.setLayoutX(top.imageView.getLayoutX() + GEM_SIZE);
+                bottom.getImageView().setLayoutX(bottom.getImageView().getLayoutX() + GEM_SIZE);
+                middle.getImageView().setLayoutX(middle.getImageView().getLayoutX() + GEM_SIZE);
+                top.getImageView().setLayoutX(top.getImageView().getLayoutX() + GEM_SIZE);
             }
         }
 
     private void moveDown() {
         setGems(currentGems);
         if(board.checkDown(curX, curY)) {
-            bottom.imageView.setLayoutY(bottom.imageView.getLayoutY() + GEM_SIZE);
-            middle.imageView.setLayoutY(middle.imageView.getLayoutY() + GEM_SIZE);
-            top.imageView.setLayoutY(top.imageView.getLayoutY() + GEM_SIZE);
+            bottom.getImageView().setLayoutY(bottom.getImageView().getLayoutY() + GEM_SIZE);
+            middle.getImageView().setLayoutY(middle.getImageView().getLayoutY() + GEM_SIZE);
+            top.getImageView().setLayoutY(top.getImageView().getLayoutY() + GEM_SIZE);
         } else {
             setPiece(curY);
         }
@@ -221,8 +258,8 @@ public class Main extends Application {
     private void setGems(List<Gem> gemList) {
         for (Gem gem : gemList) {
             if (gem.getPosition() == 2) {
-                curX = (int) gem.imageView.getLayoutX() / GEM_SIZE;
-                curY = ((int) gem.imageView.getLayoutY() / GEM_SIZE) + 1;
+                curX = (int) gem.getImageView().getLayoutX() / GEM_SIZE;
+                curY = ((int) gem.getImageView().getLayoutY() / GEM_SIZE) + 1;
                 bottom = gem;
             }
             if (gem.getPosition() == 1) {
@@ -235,12 +272,13 @@ public class Main extends Application {
     }
 
     private void checkMatches() {
+        board.redraw();
         matches = board.getMatches();
 
         if (matches.size() >= 3) {
             for (int x = 0; x < board.grid.length; x++) {
                 for (int y = 0; y < board.grid[x].length; y++) {
-                    if (board.grid[x][y].destroy) {
+                    if (board.grid[x][y].getDestroy()) {
                         destroyGem(board.grid[x][y]);
                         board.grid[x][y] = new Gem(0, 0, 0);
                         currentScore += 50 * matchedThreeMultiplier * currentLevel;
@@ -249,21 +287,23 @@ public class Main extends Application {
                         SidePanel.setGemCount(gemCount);
                         if (currentScore % 2000 == 0) {
                             currentLevel++;
-                            System.out.println("current level " + currentLevel);
                             SidePanel.setLevel(currentLevel);
-                            gameTimer.increaseSpeed(100);
+                            gameTimer.increaseSpeed(50);
+                            if (currentLevel % 10 == 0) {
+                                gameTimer.resetSpeed();
+                            }
                         }
                     }
                 }
             }
+
             matchedThreeMultiplier += 2;
 
-        } else {
-            board.redrawBoard();
+        }
+        if (matches.size() == 0) {
             makeNewColumn(pane);
             matchedThreeMultiplier = 1;
         }
-
     }
 
     public void destroyGem(Gem gem) {
@@ -273,39 +313,38 @@ public class Main extends Application {
         if (!settingsPane.getDisableFX()) {
             score.play(1);
         }
-        parallelTransition.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                if (matches.size() == 1) {
-                    matches.remove(gem);
-                    destroyComplete = true;
-                    board.redrawBoard();
-                    checkMatches();
-                } else {
-                    matches.remove(gem);
-                }
+        parallelTransition.setOnFinished(actionEvent -> {
+            if (matches.size() == 1) {
+                matches.remove(gem);
+                destroyComplete = true;
+                checkMatches();
+            } else {
+                matches.remove(gem);
             }
         });
-
     }
 
     private void setPiece(int y) {
         pause();
-        System.out.println((int) top.imageView.getLayoutY());
-        if(board.checkTop(curX, (int) top.imageView.getLayoutY())) {
+        isFalling = false;
+        if(board.checkTop(curX, (int) top.getImageView().getLayoutY())) {
+            game = false;
             gameOver();
         } else {
 
             if (!settingsPane.getDisableFX()) {
                 drop.play(1);
             }
-            isFalling = false;
+
             board.setGridPositions(currentGems, y);
             checkMatches();
         }
     }
 
+
     private void newGame() {
+        onHighScore = false;
+        game = true;
         pane = new Pane();
         sidePanel = new SidePanel(isChristmasTheme);
         board = new Board();
@@ -335,11 +374,11 @@ public class Main extends Application {
         gemCount = 0;
         currentLevel = 1;
 
-        board.redrawBoard();
         game = true;
         gameTimer.start();
-        createColumn();
-        pane.getChildren().addAll(gem1.imageView, gem2.imageView, gem3.imageView);
+        player.play();
+        createFirstColumn();
+        pane.getChildren().addAll(gem1.getImageView(), gem2.getImageView(), gem3.getImageView());
     }
 
     private void drop() {
@@ -350,8 +389,8 @@ public class Main extends Application {
         setGems(currentGems);
 
         //check the next empty Y coordinate
-        for (int y = 0; y < board.grid[(int)bottom.imageView.getLayoutX() / GEM_SIZE].length; y++) {
-            if (board.grid[(int)bottom.imageView.getLayoutX() / GEM_SIZE][y].getColorId() == 0) {
+        for (int y = 0; y < board.grid[(int)bottom.getImageView().getLayoutX() / GEM_SIZE].length; y++) {
+            if (board.grid[(int)bottom.getImageView().getLayoutX() / GEM_SIZE][y].getColorId() == 0) {
 //                System.out.println("Empty Spot is " + y);
                 emptyY = y;
             }
@@ -359,49 +398,40 @@ public class Main extends Application {
 
         //bottom is at the bottom
         if (bottom.getPosition() == 2) {
-            top.imageView.relocate(top.imageView.getLayoutX(),(emptyY - 2) * GEM_SIZE);
-            middle.imageView.relocate(middle.imageView.getLayoutX(),(emptyY - 1) * GEM_SIZE);
-            bottom.imageView.relocate(bottom.imageView.getLayoutX(),emptyY * GEM_SIZE);
+            top.getImageView().relocate(top.getImageView().getLayoutX(),(emptyY - 2) * GEM_SIZE);
+            middle.getImageView().relocate(middle.getImageView().getLayoutX(),(emptyY - 1) * GEM_SIZE);
+            bottom.getImageView().relocate(bottom.getImageView().getLayoutX(),emptyY * GEM_SIZE);
             setPiece(emptyY);
         }
         else if (bottom.getPosition() == 1)
         {
-            middle.imageView.relocate(middle.imageView.getLayoutX(),(emptyY - 2) * GEM_SIZE);
-            bottom.imageView.relocate(bottom.imageView.getLayoutX(),(emptyY - 1) * GEM_SIZE);
-            top.imageView.relocate(top.imageView.getLayoutX(),emptyY * GEM_SIZE );
+            middle.getImageView().relocate(middle.getImageView().getLayoutX(),(emptyY - 2) * GEM_SIZE);
+            bottom.getImageView().relocate(bottom.getImageView().getLayoutX(),(emptyY - 1) * GEM_SIZE);
+            top.getImageView().relocate(top.getImageView().getLayoutX(),emptyY * GEM_SIZE );
             setPiece(emptyY);
         }
         else
         {
-            bottom.imageView.relocate(middle.imageView.getLayoutX(),(emptyY - 2) * GEM_SIZE);
-            top.imageView.relocate(bottom.imageView.getLayoutX(),(emptyY - 1) * GEM_SIZE);
-            middle.imageView.relocate(top.imageView.getLayoutX(),emptyY * GEM_SIZE);
+            bottom.getImageView().relocate(middle.getImageView().getLayoutX(),(emptyY - 2) * GEM_SIZE);
+            top.getImageView().relocate(bottom.getImageView().getLayoutX(),(emptyY - 1) * GEM_SIZE);
+            middle.getImageView().relocate(top.getImageView().getLayoutX(),emptyY * GEM_SIZE);
             setPiece(emptyY);
         }
     }
 
     public void makeNewColumn(Pane pane) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (paused) resume();
-                gems.addAll(currentGems);
-                currentGems.clear();
-                createColumn();
-                columnCreated++;
-                pane.getChildren().addAll(gem1.imageView, gem2.imageView, gem3.imageView);
-                isFalling = true;
-            }
+        Platform.runLater(() -> {
+            if (paused) resume();
+            gems.addAll(currentGems);
+            currentGems.clear();
+            createNextColumnm();
+            isFalling = true;
         });
     }
 
 
     private boolean checkKeyPress() {
-        if (!isKeyPressed) {
-            return true;
-        } else {
-            return false;
-        }
+        return !isKeyPressed;
     }
 
     private void pause() {
@@ -422,13 +452,13 @@ public class Main extends Application {
         //bottom is at the bottom
         if (gem1.getPosition() == 2) {
             //top down 1
-            gem3.imageView.setLayoutY((int)gem3.imageView.getLayoutY() + GEM_SIZE);//B
+            gem3.getImageView().setLayoutY((int)gem3.getImageView().getLayoutY() + GEM_SIZE);//B
             gem3.setPosition(1);
             //middle down 1
-            gem2.imageView.setLayoutY((int)gem2.imageView.getLayoutY() + GEM_SIZE);     //M
+            gem2.getImageView().setLayoutY((int)gem2.getImageView().getLayoutY() + GEM_SIZE);     //M
             gem2.setPosition(2);
             //bottom to top
-            gem1.imageView.setLayoutY((int)gem1.imageView.getLayoutY() - (GEM_SIZE * 2));//T
+            gem1.getImageView().setLayoutY((int)gem1.getImageView().getLayoutY() - (GEM_SIZE * 2));//T
             gem1.setPosition(0);
         }
 
@@ -436,13 +466,13 @@ public class Main extends Application {
         else if (gem1.getPosition() == 1)
         {
             //bottom down 1
-            gem1.imageView.setLayoutY(gem1.imageView.getLayoutY() + GEM_SIZE ); //B
+            gem1.getImageView().setLayoutY(gem1.getImageView().getLayoutY() + GEM_SIZE ); //B
             gem1.setPosition(2);
             //middle down 1
-            gem2.imageView.setLayoutY(gem2.imageView.getLayoutY() + GEM_SIZE);        //M
+            gem2.getImageView().setLayoutY(gem2.getImageView().getLayoutY() + GEM_SIZE);        //M
             gem2.setPosition(1);
             //top to top
-            gem3.imageView.setLayoutY(gem3.imageView.getLayoutY() - (GEM_SIZE*2));                  //T
+            gem3.getImageView().setLayoutY(gem3.getImageView().getLayoutY() - (GEM_SIZE*2));                  //T
             gem3.setPosition(0);
         }
 
@@ -450,36 +480,33 @@ public class Main extends Application {
         else
         {
             //bottom down 1`
-            gem1.imageView.setLayoutY(gem1.imageView.getLayoutY() + GEM_SIZE); //B
+            gem1.getImageView().setLayoutY(gem1.getImageView().getLayoutY() + GEM_SIZE); //B
             gem1.setPosition(1);
             //top down 1
-            gem3.imageView.setLayoutY(gem3.imageView.getLayoutY() + GEM_SIZE);  //M
+            gem3.getImageView().setLayoutY(gem3.getImageView().getLayoutY() + GEM_SIZE);  //M
             gem3.setPosition(0);
             //middle to top
-            gem2.imageView.setLayoutY(gem2.imageView.getLayoutY() - (GEM_SIZE*2));                //T
+            gem2.getImageView().setLayoutY(gem2.getImageView().getLayoutY() - (GEM_SIZE*2));                //T
             gem2.setPosition(2);
         }
-
     }
 
     private void gameOver() {
-        gameOverPane = new GameOverPane(GEM_SIZE, BOARD_WIDTH, BOARD_HEIGHT, highScorePane, currentScore, new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                newGame();
-                return null;
-            }
+        sidePanel.getChildren().remove(sidePanel.getGemView());
+        gameOverPane = new GameOverPane(GEM_SIZE, BOARD_WIDTH, BOARD_HEIGHT, highScorePane, currentScore, () -> {
+            newGame();
+            return null;
         });
 
         if (highScorePane.checkScore(currentScore)) {
             root.setLeft(gameOverPane.getHighScoreGameOverScreen());
+            onHighScore = true;
         } else {
             root.setLeft(gameOverPane.getGameOverScreen());
         }
 
         player.stop();
         gameTimer.stop();
-
     }
 
     private void highScoresScreen() {
@@ -517,28 +544,19 @@ public class Main extends Application {
         title.setLayoutY(GEM_SIZE * 4);
         title.setWrapText(true);
 
-        Button playButton = new Button("Play", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                newGame();
-                return null;
-            }
+        Button playButton = new Button("Play", () -> {
+            newGame();
+            return null;
         }, GEM_SIZE * 2 - 15, GEM_SIZE * 7);
 
-        Button settingsButton = new Button("Settings", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                settingsScreen();
-                return null;
-            }
+        Button settingsButton = new Button("Settings", () -> {
+            settingsScreen();
+            return null;
         }, GEM_SIZE * 2 - 15, GEM_SIZE * 8);
 
-        Button highScoresButton = new Button("Scores", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                highScoresScreen();
-                return null;
-            }
+        Button highScoresButton = new Button("Scores", () -> {
+            highScoresScreen();
+            return null;
         }, GEM_SIZE * 2 - 15, GEM_SIZE * 9);
 
         pane.getChildren().addAll(title, playButton.hbox, settingsButton.hbox, highScoresButton.hbox);

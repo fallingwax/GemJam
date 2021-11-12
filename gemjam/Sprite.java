@@ -14,7 +14,7 @@ public class Sprite {
         BufferedImage sprite = null;
 
         try {
-            sprite = ImageIO.read(Sprite.class.getResource("gems2.png"));
+            sprite = ImageIO.read(Sprite.class.getResource("/res/gems2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -22,13 +22,10 @@ public class Sprite {
         return sprite;
     }
 
-    public static BufferedImage getSprite(int xGrid, int yGrid) {
+    public static BufferedImage getSprite(int x, int y) {
 
-        if (spriteSheet == null) {
-            spriteSheet = loadSprite("gems2");
-        }
-
-        return spriteSheet.getSubimage(xGrid * TILE_SIZE, yGrid * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        spriteSheet = loadSprite("gems2");
+        return spriteSheet.getSubimage(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
 
 }

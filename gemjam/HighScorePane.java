@@ -78,7 +78,6 @@ public class HighScorePane {
             index = this.highScoresList.indexOf(highScore);
             if (score > highScore.score) {
                 index = this.highScoresList.indexOf(highScore);
-                System.out.println(index);
                 insert = new HighScores(score,initials);
                 break;
             }

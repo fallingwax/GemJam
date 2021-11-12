@@ -1,10 +1,12 @@
 package gemjam;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -55,23 +57,28 @@ public class SettingsPane {
         gridPane.getStyleClass().add("settings");
         gridPane.add(settingsLabel, 0, 0,2,1 );
         int row = 1;
+        gridPane.setVgap(15);
+        gridPane.setHgap(10);
 
         for (Map.Entry<Label, ImageView> entry : map.entrySet()) {
             ImageView iv = entry.getValue();
             Label label = entry.getKey();
             iv.setFitHeight(50);
             iv.setFitWidth(50);
+            iv.getStyleClass().add("imageview");
             label.getStyleClass().add("settings-label");
+            label.setAlignment(Pos.BASELINE_LEFT);
             gridPane.add(iv,0,row);
             gridPane.add(label, 1, row);
             row++;
-            System.out.println(row);
             setLastRow(row + 1);
         }
 
         soundLabel.getStyleClass().add("settings-label");
         fxLabel.getStyleClass().add("settings-label");
         christmasLabel.getStyleClass().add("settings-label");
+        disable_sound.getStyleClass().add("check-box");
+        disable_fx.getStyleClass().add("check-box");
         gridPane.add(disable_sound, 0, lastRow);
         gridPane.add(soundLabel,1, lastRow);
         gridPane.add(disable_fx, 0,lastRow + 1);

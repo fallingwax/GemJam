@@ -2,7 +2,9 @@ package gemjam;
 
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Board {
 
@@ -49,7 +51,7 @@ public class Board {
             }
         }
 
-        int x = (int) gem1.imageView.getLayoutX() / GEM_SIZE;
+        int x = (int) gem1.getImageView().getLayoutX() / GEM_SIZE;
 
         //gem1 is at the top
         if (gem1.getPosition() == 0) {
@@ -88,7 +90,7 @@ public class Board {
      * @return true if the element below is empty
      */
     public boolean checkDown(int x, int y) {
-        if (y + 1 == BOARD_HEIGHT) {
+        if (y + 1 >= BOARD_HEIGHT) {
             return false;
         } else if (grid[x][y + 1].getColorId() > 0) {
             return false;
@@ -122,7 +124,7 @@ public class Board {
      * @true if the element to the right is empty
      */
     public boolean checkRight(int x, int y) {
-        if (x + 1 == BOARD_WIDTH) {
+        if (x + 1 >= BOARD_WIDTH) {
             return false;
         } else if (grid[x + 1][y].getColorId() > 0) {
             return false;
@@ -131,22 +133,36 @@ public class Board {
         }
     }
 
-    public void redrawBoard() {
-        for (int x = 0; x < BOARD_WIDTH; x++) {
-            for (int y = 0; y < BOARD_HEIGHT - 1; y++) {
-                if (grid[x][y].getColorId() > 0) {
-                    if (checkDown(x, y)) {
-                        grid[x][y + 1] = grid[x][y];
-                        grid[x][y] = new Gem(0, 0, 0);
+    public void redraw() {
+
+        boolean noEmptySpaces = false;
+
+        while (!noEmptySpaces) {
+            int blankSpaces = 0;
+            for (int x = 0; x < BOARD_WIDTH; x++) {
+                for (int y = 0; y < BOARD_HEIGHT - 1; y++) {
+                    if (grid[x][y].getColorId() > 0) {
+                        if (grid[x][y + 1].getColorId() == 0) {
+                            blankSpaces++;
+                            grid[x][y + 1] = grid[x][y];
+                            grid[x][y] = new Gem(0, 0, 0);
+                        }
                     }
                 }
             }
+            if (blankSpaces > 0 ) {
+                noEmptySpaces = false;
+            } else {
+                noEmptySpaces = true;
+            }
         }
+
+
 
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[x].length; y++) {
                 if (grid[x][y].getColorId() > 0) {
-                    grid[x][y].imageView.relocate(x * GEM_SIZE, y * GEM_SIZE);
+                    grid[x][y].getImageView().relocate(x * GEM_SIZE, y * GEM_SIZE);
                 }
             }
         }
@@ -155,9 +171,6 @@ public class Board {
     public List<Gem> getMatches() {
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[x].length; y++) {
-                if (matches.contains(grid[x][y]))
-                    //check if we already cell to the list
-                    continue;
 
                 //check if colorId != 0
                 if (grid[x][y].getColorId() != 0) {
@@ -244,13 +257,31 @@ public class Board {
             gem.setDestory();
         }
 
-        return matches;
+        return removeDupes(matches);
     }
 
     private void printArray() {
         for (int x = 0; x < grid.length; x++)
             for (int y = 0; y < grid[x].length; y++)
-                System.out.println("x= " + x + " y=" + y + " Position: " + grid[x][y].position + " Color: " + grid[x][y].getColorId() + " Destroy:" + grid[x][y].destroy);
+                System.out.println("x= " + x + " y=" + y + " Position: " + grid[x][y].getPosition() + " Color: " + grid[x][y].getColorId() + " Destroy:" + grid[x][y].getDestroy());
+    }
+
+    private static List<Gem> removeDupes(List<Gem> gemList) {
+        //create a LinkedHashSet that won't allow duplicates.
+        Set<Gem> set = new LinkedHashSet<>();
+
+        //add the gem list to the set
+        set.addAll(gemList);
+
+        //clear our current list
+        gemList.clear();
+
+        //add back in the elements from the LinkedHashSet
+        gemList.addAll(set);
+
+        //return the new list with no duplicates.
+        return gemList;
+
     }
 
 

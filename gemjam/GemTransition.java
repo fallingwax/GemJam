@@ -17,11 +17,11 @@ public class GemTransition {
         tt.setToY(-(gemSize * 3));
         tt.setDuration(Duration.millis(500));
         tt.setCycleCount(1);
-        tt.setNode(gem.imageView);
+        tt.setNode(gem.getImageView());
         fd.setFromValue(10);
         fd.setToValue(0);
         fd.setDuration(Duration.millis(500));
-        fd.setNode(gem.imageView);
+        fd.setNode(gem.getImageView());
         fd.setCycleCount(1);
         setPt();
     }
