@@ -2,6 +2,9 @@ package gemjam;
 
 import java.util.List;
 
+/**
+ * A class to model the results of the high scores JSON data
+ */
 public class Results {
     List<HighScores> highscores;
 

@@ -1,6 +1,5 @@
 package gemjam;
 
-
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -8,13 +7,20 @@ import java.util.Set;
 
 public class Board {
 
+    //the board size
     final static int BOARD_WIDTH = 6;
     final static int BOARD_HEIGHT = 13;
     final static int GEM_SIZE = 80;
 
+    //two dimensional array to represent the game board
     Gem[][] grid;
+
+    //the list all current matches
     List<Gem> matches;
 
+    /**
+     * Constructor
+     */
     public Board() {
         grid = new Gem[BOARD_WIDTH][BOARD_HEIGHT];
         fillArray();
@@ -22,7 +28,7 @@ public class Board {
     }
 
     /**
-     * fill grid with empty Gems
+     * A method to fill the grid with empty Gems
      */
     private void fillArray() {
         for (int x = 0; x < grid.length; x++)
@@ -33,7 +39,8 @@ public class Board {
     /**
      * A method to set the current gems into the current grid positions
      *
-     * @param gemList
+     * @param gemList the list of current gems
+     * @param y the current y value
      */
     public void setGridPositions(List<Gem> gemList, int y) {
         Gem gem1 = null;
@@ -69,25 +76,26 @@ public class Board {
         {
             grid[x][y] = gem1;
             grid[x][y - 1] = gem2;
-            grid[x][y - 2] = gem3;;
+            grid[x][y - 2] = gem3;
         }
-//        printArray();
     }
 
+    /**
+     * A method to check if we have a piece above the top of the board
+     * @param x the current X position
+     * @param y the current Y position
+     * @return boolean
+     */
     public boolean checkTop(int x, int y) {
-        if (y <= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return y <= 0;
     }
 
     /**
      * A method used to check if the space below is the end of our array or if element below is filled
      *
-     * @param x
-     * @param y
-     * @return true if the element below is empty
+     * @param x the current X position
+     * @param y the current y position
+     * @return boolean
      */
     public boolean checkDown(int x, int y) {
         if (y + 1 >= BOARD_HEIGHT) {
@@ -102,8 +110,8 @@ public class Board {
     /**
      * A method used to check if the space to the left is the beginning of our array or if element is filled
      *
-     * @param x
-     * @param y
+     * @param x the current X position
+     * @param y the current Y position
      * @return boolean
      */
     public boolean checkLeft(int x, int y) {
@@ -119,9 +127,9 @@ public class Board {
     /**
      * A method used to check if the space to the right is the end of our array or if element is filled
      *
-     * @param x
-     * @param y
-     * @true if the element to the right is empty
+     * @param x the current X position
+     * @param y the current Y position
+     * @return if the element to the right is empty
      */
     public boolean checkRight(int x, int y) {
         if (x + 1 >= BOARD_WIDTH) {
@@ -133,6 +141,9 @@ public class Board {
         }
     }
 
+    /**
+     * A method to fill in all empty spaces below the current Gems and relocate the Gems on the screen
+     */
     public void redraw() {
 
         boolean noEmptySpaces = false;
@@ -150,11 +161,7 @@ public class Board {
                     }
                 }
             }
-            if (blankSpaces > 0 ) {
-                noEmptySpaces = false;
-            } else {
-                noEmptySpaces = true;
-            }
+            noEmptySpaces = blankSpaces <= 0;
         }
 
 
@@ -168,6 +175,10 @@ public class Board {
         }
     }
 
+    /**
+     * A method to check if there any matches of three or more Gems either horizontally, vertically or diagonally
+     * @return List of all matches without duplicates
+     */
     public List<Gem> getMatches() {
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[x].length; y++) {
@@ -239,7 +250,7 @@ public class Board {
                             matches.add(grid[x - 2][y + 2]);
                             if (x - 3 >= 0 && y + 3 < BOARD_HEIGHT) {
                                 if (grid[x][y].getColorId() == grid[x - 3][y + 3].getColorId()) {
-                                    matches.add(grid[x - 3][y + 3]);;
+                                    matches.add(grid[x - 3][y + 3]);
                                     if (x - 4 >= 0 && y + 4 < BOARD_HEIGHT) {
                                         if (grid[x][y].getColorId() == grid[x - 4][y + 4].getColorId()) {
                                             matches.add(grid[x - 4][y + 4]);
@@ -253,6 +264,7 @@ public class Board {
             }
         }
 
+        //mark the gems to be destroyed
         for (Gem gem : matches) {
             gem.setDestory();
         }
@@ -260,18 +272,25 @@ public class Board {
         return removeDupes(matches);
     }
 
+    /**
+     * A method to print out the current elements in the board.
+     */
     private void printArray() {
         for (int x = 0; x < grid.length; x++)
             for (int y = 0; y < grid[x].length; y++)
                 System.out.println("x= " + x + " y=" + y + " Position: " + grid[x][y].getPosition() + " Color: " + grid[x][y].getColorId() + " Destroy:" + grid[x][y].getDestroy());
     }
 
+    /**
+     * A method to remove the duplicates in the current matches by passing them through a LinkedHashSet
+     * @param gemList the current matches
+     * @return A List of current matches without duplicates
+     */
     private static List<Gem> removeDupes(List<Gem> gemList) {
         //create a LinkedHashSet that won't allow duplicates.
-        Set<Gem> set = new LinkedHashSet<>();
 
         //add the gem list to the set
-        set.addAll(gemList);
+        Set<Gem> set = new LinkedHashSet<>(gemList);
 
         //clear our current list
         gemList.clear();
@@ -283,7 +302,4 @@ public class Board {
         return gemList;
 
     }
-
-
-
 }

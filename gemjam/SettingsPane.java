@@ -6,19 +6,23 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
+/**
+ * A class for the settings screen
+ */
 public class SettingsPane {
     GridPane gridPane;
+
+    //Using to map to load elements into the GridPane
     Map<Label, ImageView> map = new LinkedHashMap<>();
 
     CheckBox disable_sound = new CheckBox();
     CheckBox disable_fx = new CheckBox();
     CheckBox set_christmas = new CheckBox();
 
+    //Keyboard key images
     ImageView arrow_down = new ImageView(new Image("/res/keys/arrow down.png"));
     ImageView arrow_right = new ImageView(new Image("/res/keys/arrow right.png"));
     ImageView arrow_up =  new ImageView(new Image("/res/keys/arrow up.png"));
@@ -42,14 +46,17 @@ public class SettingsPane {
     Label dLabel = new Label("Move gems right");
     Label sLabel = new Label("Move gems down");
     Label wLabel = new Label("Drop gems");
-
     Label soundLabel = new Label("Disable music");
     Label fxLabel = new Label("Disable sound effects");
     Label christmasLabel = new Label("Christmas Theme");
     Label settingsLabel = new Label("Settings");
 
+    //int to hold the last row of the gridpane
     int lastRow;
 
+    /**
+     * Constructor
+     */
     public SettingsPane() {
 
         setMap();
@@ -88,7 +95,9 @@ public class SettingsPane {
 
     }
 
-
+    /**
+     * A method to map the elements of the settings screen
+     */
     public void setMap() {
         map.put(downLabel,arrow_down);
         map.put(upLabel,arrow_up);
@@ -103,23 +112,43 @@ public class SettingsPane {
         map.put(wLabel,letter_w);
     }
 
+    /**
+     * A method to set the last row
+     * @param row set the last row of the GridPane
+     */
     private void setLastRow(int row) {
         this.lastRow = row;
     }
 
+    /**
+     * A method to return the gridpane
+     * @return returning the GripPane
+     */
     public GridPane getGridPane() {
         return gridPane;
     }
 
+    /**
+     * A method to get the value of the disable sound checkbox
+     * @return the value of isSelected
+     */
     public boolean getDisableMusic() {
-         return disable_sound.isSelected() ? true : false;
+         return disable_sound.isSelected();
     }
 
+    /**
+     * A method to get the value of the disable fx checkbox
+     * @return the value of isSelected
+     */
     public boolean getDisableFX() {
-        return disable_fx.isSelected() ? true : false;
+        return disable_fx.isSelected();
     }
 
+    /**
+     * A method to get the value of the christmas theme checkbox
+     * @return the value of isSelected
+     */
     public boolean getChristmasTheme() {
-        return set_christmas.isSelected() ? true : false;
+        return set_christmas.isSelected();
     }
 }
