@@ -47,13 +47,13 @@ public class Board {
         Gem gem2 = null;
         Gem gem3 = null;
         for (Gem gem : gemList) {
-            if (gem.getInitialPosition() == 2) {
+            if (gem.getINITIAL_POSITION() == 2) {
                 gem1 = gem;
             }
-            if (gem.getInitialPosition() == 1) {
+            if (gem.getINITIAL_POSITION() == 1) {
                 gem2 = gem;
             }
-            if (gem.getInitialPosition() == 0) {
+            if (gem.getINITIAL_POSITION() == 0) {
                 gem3 = gem;
             }
         }
@@ -82,11 +82,10 @@ public class Board {
 
     /**
      * A method to check if we have a piece above the top of the board
-     * @param x the current X position
      * @param y the current Y position
      * @return boolean
      */
-    public boolean checkTop(int x, int y) {
+    public boolean checkTop(int y) {
         return y <= 0;
     }
 

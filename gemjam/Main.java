@@ -102,7 +102,7 @@ public class Main extends Application {
     };
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         // set up the scene
         root = new BorderPane();
@@ -371,7 +371,7 @@ public class Main extends Application {
 
         // create a new column if no matches and reset the multiplier
         if (matches.size() == 0) {
-            makeNewColumn(pane);
+            makeNewColumn();
             matchedThreeMultiplier = 1;
         }
     }
@@ -417,7 +417,7 @@ public class Main extends Application {
         pause();
         isFalling = false;
         // check for game over, if a piece is set above the top row of the game board
-        if(board.checkTop(curX, (int) top.getImageView().getLayoutY())) {
+        if(board.checkTop((int) top.getImageView().getLayoutY())) {
             game = false;
             gameOver();
         } else {
@@ -533,9 +533,8 @@ public class Main extends Application {
 
     /**
      * A method to make a new column of gems
-     * @param pane the current pane
      */
-    public void makeNewColumn(Pane pane) {
+    public void makeNewColumn() {
 
         //run later so that we execute this method on the current thread
         Platform.runLater(() -> {

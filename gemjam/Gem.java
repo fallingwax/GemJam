@@ -28,10 +28,10 @@ public class Gem {
     private int size;
     private int x;
     private int y;
-    private Color color;
+    final private Color COLOR;
     private int id;
     private int position;
-    private int initialPosition;
+    final private int INITIAL_POSITION;
     private boolean destroy = false;
     private BufferedImage bufferedImage;
     private Image image;
@@ -50,25 +50,25 @@ public class Gem {
         this.x = x;
         this.y = y;
         this.position = position;
-        this.initialPosition = position;
+        this.INITIAL_POSITION = position;
 
         //get a random valye for the color of the Gem
         Random random = new Random();
         //change this value to set the number of colors 1 - 6
         int rnd = random.nextInt(6);
-        color = colors.get(rnd);
+        COLOR = colors.get(rnd);
 
         //If were are not themed that get the normal gem images
         if (!christmas) {
-            if (color == Color.RED) {
+            if (COLOR == Color.RED) {
                 setImageView(1,2, 0);
-            } else if (color == Color.BLUE) {
+            } else if (COLOR == Color.BLUE) {
                 setImageView(2,3, 1);
-            } else if (color == Color.ORANGE) {
+            } else if (COLOR == Color.ORANGE) {
                 setImageView(3,0, 1);
-            } else if (color == Color.GREEN) {
+            } else if (COLOR == Color.GREEN) {
                 setImageView(4,1, 0);
-            } else if (color == Color.PURPLE) {
+            } else if (COLOR == Color.PURPLE) {
                 setImageView(5,0, 0);
             } else {
                 setImageView(6,3, 0);
@@ -76,19 +76,19 @@ public class Gem {
         } else {
 
             //if we are themed use the christmas balls
-            if (color == Color.RED) {
+            if (COLOR == Color.RED) {
                 id = 1;
                 this.imageView = new ImageView(new Image("/res/ChristmasBalls/01.png"));
-            } else if (color == Color.BLUE) {
+            } else if (COLOR == Color.BLUE) {
                 id = 2;
                 this.imageView = new ImageView(new Image("/res/ChristmasBalls/07.png"));
-            } else if (color == Color.ORANGE ) {
+            } else if (COLOR == Color.ORANGE ) {
                 id = 3;
                 this.imageView = new ImageView(new Image("/res/ChristmasBalls/02.png"));
-            } else if (color == Color.GREEN) {
+            } else if (COLOR == Color.GREEN) {
                 id = 4;
                 this.imageView = new ImageView(new Image("/res/ChristmasBalls/08.png"));
-            } else if (color == Color.PURPLE) {
+            } else if (COLOR == Color.PURPLE) {
                 id = 5;
                 this.imageView = new ImageView(new Image("/res/ChristmasBalls/14.png"));
             } else {
@@ -114,8 +114,8 @@ public class Gem {
         this.y = y;
         this.id = 0;
         this.position = 3;
-        this.color = Color.BLACK;
-        this.initialPosition = 0;
+        this.COLOR = Color.BLACK;
+        this.INITIAL_POSITION = 0;
     }
 
     /**
@@ -138,7 +138,7 @@ public class Gem {
      * A method to get the starting position
      * @return the initial position
      */
-    public int getInitialPosition() { return this.initialPosition; }
+    public int getINITIAL_POSITION() { return this.INITIAL_POSITION; }
 
     /**
      * A method to return the X value
@@ -250,10 +250,10 @@ public class Gem {
                 "size=" + size +
                 ", x=" + x +
                 ", y=" + y +
-                ", color=" + color +
+                ", color=" + COLOR +
                 ", id=" + id +
                 ", position=" + position +
-                ", initialPosition=" + initialPosition +
+                ", initialPosition=" + INITIAL_POSITION +
                 ", destroy=" + destroy +
                 ", bufferedImage=" + bufferedImage +
                 ", image=" + image +
