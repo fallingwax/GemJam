@@ -13,21 +13,19 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
 
     // Sound effects
-    AudioClip swap = new AudioClip(getClass().getResource("/sounds/swoosh.wav").toExternalForm());
-    AudioClip drop = new AudioClip(getClass().getResource("/sounds/drop.wav").toExternalForm());
-    AudioClip score = new AudioClip(getClass().getResource("/sounds/score.wav").toExternalForm());
+    AudioClip swap;
+    AudioClip drop;
+    AudioClip score;
 
     // Music
-    Media level1 = new Media(getClass().getResource("/sounds/track1.mp3").toExternalForm());
-    //https://rushcoil.bandcamp.com/album/xmas-compilation-2010
-    Media christmas = new Media(getClass().getResource("/sounds/RushJet1 - XMAS Compilation 2010 - 13 O Holy Night.mp3").toExternalForm());
+    Media level1;
+    Media christmas;
 
     // Media Player
     Media track;
@@ -103,6 +101,18 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
+        System.out.println(getClass().getResource("/sounds/swoosh.wav").toExternalForm());
+        // Sound effects
+        swap = new AudioClip(getClass().getResource("/sounds/swoosh.wav").toExternalForm());
+        drop = new AudioClip(getClass().getResource("/sounds/drop.wav").toExternalForm());
+        score = new AudioClip(getClass().getResource("/sounds/score.wav").toExternalForm());
+
+        // Music
+        level1 = new Media(getClass().getResource("/sounds/track1.mp3").toExternalForm());
+        //https://rushcoil.bandcamp.com/album/xmas-compilation-2010
+        christmas = new Media(getClass().getResource("/sounds/RushJet1 - XMAS Compilation 2010 - 13 O Holy Night.mp3").toExternalForm());
+
 
         // set up the scene
         root = new BorderPane();
