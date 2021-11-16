@@ -24,7 +24,7 @@ ENTER - Finish
 ## Images from: 
 Christmas Balls - Wenrexa, https://opengameart.org/content/free-christmas-balls-pack Commercial and free use; Attribution not required;  
 Gem Jewel Diamond Glass - Osmic, https://opengameart.org/content/gem-jewel-diamond-glass license https://creativecommons.org/licenses/by/3.0/  
-Button Image - Ville Seppanen, license http://creativecommons.org/licenses/by/3.0/
+Button Image - Ville Seppanen, license http://creativecommons.org/licenses/by/3.0/  
 Keyboard Keys Icons by Chromatix, https://iconarchive.com/show/keyboard-keys-icons-by-chromatix.html, license https://creativecommons.org/licenses/by-nc-nd/4.0/  
 UI pack by Kenney Vleugels (www.kenney.nl), license http://creativecommons.org/publicdomain/zero/1.0/  
 
@@ -33,4 +33,4 @@ O Holy Night by RushJet1, https://rushcoil.bandcamp.com/album/xmas-compilation-2
 Lomuvaru by Mello C, license https://creativecommons.org/licenses/by-nc/4.0/  
 
 ## Sound Effects from:
-https://bigsoundbank.com/
+https://bigsoundbank.com/  
