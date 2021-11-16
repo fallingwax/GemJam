@@ -22,10 +22,11 @@ ENTER - Finish
 ![image](https://user-images.githubusercontent.com/33186063/142011208-68d547ee-5172-4050-9b7b-7a0d56f9dbbc.png)
 
 ## Images from: 
-Christmas Balls - Wenrexa, https://opengameart.org/content/free-christmas-balls-pack Commercial and free use; Attribution not required;
-
-Gem Jewel Diamond Glass - Osmic, https://opengameart.org/content/gem-jewel-diamond-glass license https://creativecommons.org/licenses/by/3.0/
-
+Christmas Balls - Wenrexa, https://opengameart.org/content/free-christmas-balls-pack Commercial and free use; Attribution not required;  
+Gem Jewel Diamond Glass - Osmic, https://opengameart.org/content/gem-jewel-diamond-glass license https://creativecommons.org/licenses/by/3.0/  
+Button Image - Ville Seppanen, license http://creativecommons.org/licenses/by/3.0/
+Keyboard Keys Icons by Chromatix, https://iconarchive.com/show/keyboard-keys-icons-by-chromatix.html, license https://creativecommons.org/licenses/by-nc-nd/4.0/  
+UI pack by Kenney Vleugels (www.kenney.nl), license http://creativecommons.org/publicdomain/zero/1.0/  
 ## Music from:
 O Holy Night by RushJet1, https://rushcoil.bandcamp.com/album/xmas-compilation-2010
 
