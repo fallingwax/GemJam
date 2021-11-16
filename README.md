@@ -2,7 +2,7 @@
 
 A Columns clone project for JavaFX. 
 
-##Gameplay Controls: 
+## Gameplay Controls: 
 A - Move Left  
 D - Move Right  
 S - Move Down  
@@ -11,7 +11,7 @@ SPACE - Sort Gems
 CTRL - Pause  
 Esc - Main Menu  
 
-##Enter High Score Inititals:  
+## Enter High Score Inititals:  
 UP - Change Letter Backwards  
 DOWN - Change Letter Forwards  
 RIGHT - Next Letter  
@@ -21,15 +21,15 @@ ENTER - Finish
 
 ![image](https://user-images.githubusercontent.com/33186063/142011208-68d547ee-5172-4050-9b7b-7a0d56f9dbbc.png)
 
-# Images from: 
+## Images from: 
 Christmas Balls - Wenrexa, https://opengameart.org/content/free-christmas-balls-pack Commercial and free use; Attribution not required;
 
 Gem Jewel Diamond Glass - Osmic, https://opengameart.org/content/gem-jewel-diamond-glass license https://creativecommons.org/licenses/by/3.0/
 
-# Music from:
+## Music from:
 O Holy Night by RushJet1, https://rushcoil.bandcamp.com/album/xmas-compilation-2010
 
 Lomuvaru by Mello C, license https://creativecommons.org/licenses/by-nc/4.0/
 
-# Sound Effects from:
+## Sound Effects from:
 https://bigsoundbank.com/
