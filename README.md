@@ -8,10 +8,12 @@ A Columns clone project for JavaFX.
 
 # Images from: 
 Christmas Balls - Wenrexa, https://opengameart.org/content/free-christmas-balls-pack Commercial and free use; Attribution not required;
+
 Gem Jewel Diamond Glass - Osmic, https://opengameart.org/content/gem-jewel-diamond-glass license https://creativecommons.org/licenses/by/3.0/
 
 # Music from:
 O Holy Night by RushJet1, https://rushcoil.bandcamp.com/album/xmas-compilation-2010
+
 Lomuvaru by Mello C, license https://creativecommons.org/licenses/by-nc/4.0/
 
 # Sound Effects from:
