@@ -1,0 +1,167 @@
+/*@font-face {*/
+/*    src: url('Arcade.ttf');*/
+/*}*/
+
+.stackpane {
+    -fx-padding: 20px;
+    -fx-background-color: black;
+}
+
+.hbox {
+
+    -fx-background-color: black;
+    -fx-background-radius: 15px;
+    -fx-pref-width: 400px;
+}
+
+.label {
+    -fx-font-size: 50;
+    -fx-font-family: "Arcade";
+    -fx-text-fill: rgb(255,255,255);
+    -fx-alignment: bottom-right;
+    -fx-pref-width: 300px;
+    -fx-padding: 4px;
+}
+
+.christmas-label {
+    -fx-font-size: 50;
+    -fx-font-family: "Arcade";
+    -fx-text-fill: green;
+    -fx-alignment: bottom-right;
+    -fx-pref-width: 300px;
+    -fx-padding: 4px;
+}
+
+.high-scores-heading {
+    -fx-font-size: 55;
+    -fx-font-family: "Arcade";
+    -fx-text-fill: white;
+}
+
+.high-scores-initials {
+    -fx-font-size: 50;
+    -fx-font-family: "Arcade";
+    -fx-text-fill: yellow;
+    -fx-alignment: Center-Left;
+    -fx-padding: 0 0 0 15;
+}
+
+.high-scores {
+    -fx-font-size: 50;
+    -fx-font-family: "Arcade";
+    -fx-text-fill: red;
+    -fx-alignment: Center-Left;
+    -fx-padding: 0 0 0 15;
+}
+
+.changingLabel {
+    -fx-font-size: 50;
+    -fx-font-family: "Arcade";
+    -fx-text-fill: red;
+    -fx-alignment: bottom-right;
+    -fx-pref-width: 300px;
+    -fx-padding: 4px;
+}
+
+.grid {
+    -fx-background-color: black,
+    linear-gradient(from 0.5px 0.0px to 40.5px  0.0px, repeat, rgba(3,205,255,.5) 1%, transparent 1%),
+    linear-gradient(from 0.0px 0.5px to  0.0px 40.5px, repeat, rgba(3,205,255,.5) 1%, transparent 1%);
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(3,205,255,.5);
+}
+
+.christmas-grid {
+    -fx-background-color: black,
+    linear-gradient(from 0.5px 0.0px to 40.5px  0.0px, repeat, rgba(255,0,0,.5) 1%, transparent 1%),
+    linear-gradient(from 0.0px 0.5px to  0.0px 40.5px, repeat, rgba(0,255,0,.5) 1%, transparent 1%);
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(0,255,0,.5);
+}
+
+.heading {
+    -fx-font-size: 100;
+    -fx-font-family: "Arcade";
+    -fx-text-fill: red;
+}
+
+.christmas-heading {
+    -fx-font-size: 100;
+    -fx-font-family: "Arcade";
+    -fx-text-fill: green;
+}
+
+.initials-heading {
+    -fx-font-size: 40;
+    -fx-font-family: "Arcade";
+    -fx-text-fill: red;
+    -fx-text-alignment: center;
+    -fx-pref-width: 220;
+}
+
+.game-over {
+    -fx-background-color: black;
+}
+
+.settings {
+    -fx-font-family: "Arcade";
+    -fx-background-color: black;
+}
+
+.settings-label {
+    -fx-font-size: 30;
+    -fx-text-fill: yellow;
+    -fx-pref-width: 600;
+    -fx-alignment: bottom-left;
+}
+
+.action-button {
+    -fx-background-image: url("../res/grey_button04.png");
+    -fx-background-repeat: no-repeat;
+    -fx-pref-width: 190;
+    -fx-pref-height: 45;
+}
+
+
+.action-button-text {
+    -fx-font-size: 40;
+    -fx-font-family: "Arcade";
+    -fx-text-fill: black;
+    -fx-alignment: bottom-center;
+    -fx-pref-width: 190;
+    -fx-padding: 8;
+}
+
+.action-button-text:hover {
+    -fx-font-size: 50;
+    -fx-padding: 4;
+}
+
+.yellow {
+    -fx-text-fill: yellow;
+}
+
+.white {
+    -fx-text-fill: white;
+}
+
+.next-piece {
+    -fx-border-radius: 5;
+    -fx-border-color: rgb(3,205,255);
+    -fx-border-width: 1;
+    -fx-alignment: Center;
+    -fx-pref-width: 100;
+}
+
+.christmas-next-piece {
+    -fx-border-radius: 5;
+    -fx-border-color: green;
+    -fx-border-width: 1;
+    -fx-alignment: Center;
+    -fx-pref-width: 100;
+}
+
+.check-box {
+    -fx-padding: 0 20 12 20;
+    -fx-alignment: bottom-center;
+}

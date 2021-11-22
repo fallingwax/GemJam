@@ -12,7 +12,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,22 +105,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        System.out.println(getClass().getResource("/sounds/swoosh.wav").toExternalForm());
-        // Sound effects
-        swap = new AudioClip(getClass().getResource("/sounds/swoosh.wav").toExternalForm());
-        drop = new AudioClip(getClass().getResource("/sounds/drop.wav").toExternalForm());
-        score = new AudioClip(getClass().getResource("/sounds/score.wav").toExternalForm());
-
-        // Music
-        level1 = new Media(getClass().getResource("/sounds/track1.mp3").toExternalForm());
-        //https://rushcoil.bandcamp.com/album/xmas-compilation-2010
-        christmas = new Media(getClass().getResource("/sounds/RushJet1 - XMAS Compilation 2010 - 13 O Holy Night.mp3").toExternalForm());
-
-
         // set up the scene
         root = new BorderPane();
         Scene scene = new Scene(root, BOARD_WIDTH * GEM_SIZE + 200, BOARD_HEIGHT * GEM_SIZE);
-        scene.getStylesheets().add("css/stylesheet.css");
+        Font.loadFont(getClass().getResourceAsStream("ARCADE.TTF"),-1);
+        scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
         primaryStage.setTitle("Gem Jam");
         primaryStage.setResizable(false);
         sidePanel = new SidePanel();
@@ -449,6 +441,17 @@ public class Main extends Application {
      * A method to start a new game.
      */
     private void newGame() {
+
+        // Sound effects
+        swap = new AudioClip(getClass().getResource("/sounds/swoosh.wav").toExternalForm());
+        drop = new AudioClip(getClass().getResource("/sounds/drop.wav").toExternalForm());
+        score = new AudioClip(getClass().getResource("/sounds/score.wav").toExternalForm());
+
+        // Music
+        level1 = new Media(getClass().getResource("/sounds/track1.mp3").toExternalForm());
+        //https://rushcoil.bandcamp.com/album/xmas-compilation-2010
+        christmas = new Media(getClass().getResource("/sounds/RushJet1 - XMAS Compilation 2010 - 13 O Holy Night.mp3").toExternalForm());
+
         onHighScore = false;
 
         // set game flag to true
