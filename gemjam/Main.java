@@ -299,7 +299,6 @@ public class Main extends Application {
         } else {
             setPiece(curY);
         }
-
     }
 
     /**
@@ -376,6 +375,7 @@ public class Main extends Application {
 
         // create a new column if no matches and reset the multiplier
         if (matches.size() == 0) {
+            drawBoard();
             makeNewColumn();
             matchedThreeMultiplier = 1;
         }
@@ -744,5 +744,16 @@ public class Main extends Application {
      */
     private void settingsScreen() {
         root.setLeft(settingsPane.getGridPane());
+    }
+
+    private void drawBoard() {
+        pane.getChildren().clear();
+        for (int x = 0; x < board.grid.length; x++) {
+            for (int y = 0; y < board.grid[x].length; y++) {
+                if (board.grid[x][y].getColorId() > 0) {
+                    pane.getChildren().add(board.grid[x][y].getImageView());
+                }
+            }
+        }
     }
 }
