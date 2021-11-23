@@ -5,7 +5,6 @@ A Columns clone project for JavaFX.
 ## Gameplay Controls: 
 A - Move Left  
 D - Move Right  
-S - Move Down  
 W - Drop Piece  
 SPACE - Sort Gems  
 CTRL - Pause  
