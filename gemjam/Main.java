@@ -433,6 +433,7 @@ public class Main extends Application {
 
             // set the columns position on the game board and place the gems in the array
             board.setGridPositions(currentGems, y);
+            board.redraw();
 
             // check from matches on the game board
             checkMatches();

@@ -60,23 +60,25 @@ public class Board {
 
         int x = (int) gem1.getImageView().getLayoutX() / GEM_SIZE;
 
-        //gem1 is at the top
-        if (gem1.getPosition() == 0) {
-            grid[x][y] = gem2;
-            grid[x][y - 1] = gem3;
-            grid[x][y - 2] = gem1;
-        }
-        //gem1 is in the middle
-        else if (gem1.getPosition() == 1) {
-            grid[x][y] = gem3;
-            grid[x][y - 1] = gem1;
-            grid[x][y - 2] = gem2;
-        } else
-        //gem1 is at the bottom
-        {
-            grid[x][y] = gem1;
-            grid[x][y - 1] = gem2;
-            grid[x][y - 2] = gem3;
+        if (y < BOARD_HEIGHT) {
+            //gem1 is at the top
+            if (gem1.getPosition() == 0) {
+                grid[x][y] = gem2;
+                grid[x][y - 1] = gem3;
+                grid[x][y - 2] = gem1;
+            }
+            //gem1 is in the middle
+            else if (gem1.getPosition() == 1) {
+                grid[x][y] = gem3;
+                grid[x][y - 1] = gem1;
+                grid[x][y - 2] = gem2;
+            } else
+            //gem1 is at the bottom
+            {
+                grid[x][y] = gem1;
+                grid[x][y - 1] = gem2;
+                grid[x][y - 2] = gem3;
+            }
         }
     }
 
