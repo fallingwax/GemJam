@@ -20,6 +20,7 @@ public class HighScorePane {
     Map<String, Object> map = new HashMap<>();
     Results results;
     String jsonFilePath = "./src/res/highscores.json";
+    String jsonAbsolutePath = "C:\\GemJam\\highscores.json";
     int i = 0;
     List<Label> initials;
     Label firstInitial;
@@ -87,22 +88,44 @@ public class HighScorePane {
      */
     public void setHighScores() {
 
-        // set the file
-        File json = new File(jsonFilePath);
-        try {
+        String protocol = this.getClass().getResource("").getProtocol();
+        if(Objects.equals(protocol, "jar")){
+            // run in jar
+            File file = new File(jsonAbsolutePath);
+            try {
 
-            //set up a file read
-            Reader reader = new FileReader(json);
+                //set up a file read
+                Reader reader = new FileReader(file);
 
-            // set the gson object
-            Gson gson = new Gson();
+                // set the gson object
+                Gson gson = new Gson();
 
-            // get the results from the json file
-            this.results = gson.fromJson(reader,Results.class);
-            this.highScoresList = new ArrayList<>(this.results.highscores);
-        } catch (Exception e) {
-            e.printStackTrace();
+                // get the results from the json file
+                this.results = gson.fromJson(reader,Results.class);
+                this.highScoresList = new ArrayList<>(this.results.highscores);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else if(Objects.equals(protocol, "file")) {
+            // run in ide
+            try {
+
+                //set up a file read
+                Reader reader = new FileReader(new File(jsonFilePath));
+
+                // set the gson object
+                Gson gson = new Gson();
+
+                // get the results from the json file
+                this.results = gson.fromJson(reader,Results.class);
+                this.highScoresList = new ArrayList<>(this.results.highscores);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+
 
     }
 
@@ -140,20 +163,39 @@ public class HighScorePane {
             this.highScoresList.remove(lastElement);
         }
 
-        // update json
-        try {
-            Gson gson = new Gson();
-            Writer writer = new FileWriter(jsonFilePath);
-            // map the current high score to
-            map.put("highscores", highScoresList);
 
-            // encode the json
-            gson.toJson(map,writer);
-            writer.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        String protocol = this.getClass().getResource("").getProtocol();
+        if(Objects.equals(protocol, "jar")){
+            // run in jar
+            try {
+                Gson gson = new Gson();
+                File file = new File(jsonAbsolutePath);
+                Writer writer = new FileWriter(file);
+                // map the current high score to
+                map.put("highscores", highScoresList);
+
+                // encode the json
+                gson.toJson(map,writer);
+                writer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } else if(Objects.equals(protocol, "file")) {
+            // run in ide
+            try {
+                Gson gson = new Gson();
+                Writer writer = new FileWriter("./src/res/highscores.json");
+                // map the current high score to
+                map.put("highscores", highScoresList);
+
+                // encode the json
+                gson.toJson(map,writer);
+                writer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     /**

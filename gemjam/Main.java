@@ -42,8 +42,8 @@ public class Main extends Application {
     // the UI elements
     BorderPane root;
     Pane pane;
-    HighScorePane highScorePane = new HighScorePane();
-    SettingsPane settingsPane = new SettingsPane();
+    HighScorePane highScorePane;
+    SettingsPane settingsPane;
     GameOverPane gameOverPane;
     SidePanel sidePanel;
 
@@ -105,6 +105,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        highScorePane = new HighScorePane();
+        settingsPane = new SettingsPane();
         // set up the scene
         root = new BorderPane();
         Scene scene = new Scene(root, BOARD_WIDTH * GEM_SIZE + 200, BOARD_HEIGHT * GEM_SIZE);
