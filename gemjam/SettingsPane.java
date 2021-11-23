@@ -32,7 +32,7 @@ public class SettingsPane {
     ImageView esc =  new ImageView(new Image("/res/keys/esc.png"));
     ImageView letter_a =  new ImageView(new Image("/res/keys/letter a.png"));
     ImageView letter_d =  new ImageView(new Image("/res/keys/letter d.png"));
-    ImageView letter_s =  new ImageView(new Image("/res/keys/letter s.png"));
+//    ImageView letter_s =  new ImageView(new Image("/res/keys/letter s.png"));
     ImageView letter_w = new ImageView(new Image("/res/keys/letter w.png"));
 
     Label downLabel = new Label("Enter Initials - Change letter Down");
@@ -44,7 +44,7 @@ public class SettingsPane {
     Label escLabel = new Label("Reset game");
     Label aLabel = new Label("Move gems left");
     Label dLabel = new Label("Move gems right");
-    Label sLabel = new Label("Move gems down");
+//    Label sLabel = new Label("Move gems down");
     Label wLabel = new Label("Drop gems");
     Label soundLabel = new Label("Disable music");
     Label fxLabel = new Label("Disable sound effects");
@@ -108,7 +108,7 @@ public class SettingsPane {
         map.put(escLabel,esc);
         map.put(aLabel,letter_a);
         map.put(dLabel,letter_d);
-        map.put(sLabel,letter_s);
+//        map.put(sLabel,letter_s);
         map.put(wLabel,letter_w);
     }
 
