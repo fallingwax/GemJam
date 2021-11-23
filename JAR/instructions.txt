@@ -1,0 +1,3 @@
+Extract the GemJam.zip to this folder location, C:\GemJam
+Install the Java JDK 11.0.3 
+Run launcher.bat
