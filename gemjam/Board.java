@@ -116,14 +116,12 @@ public class Board {
      * @return boolean
      */
     public boolean checkLeft(int x, int y) {
-        boolean ok = false;
+        boolean ok = true;
         if (y < BOARD_HEIGHT) {
             if (x - 1 < 0) {
                 ok = false;
             } else if (grid[x - 1][y].getColorId() > 0) {
                 ok = false;
-            } else {
-                ok = true;
             }
         }
         return ok;
@@ -137,14 +135,12 @@ public class Board {
      * @return if the element to the right is empty
      */
     public boolean checkRight(int x, int y) {
-        boolean ok = false;
+        boolean ok = true;
         if (y < BOARD_HEIGHT) {
             if (x + 1 >= BOARD_WIDTH) {
                 ok = false;
             } else if (grid[x + 1][y].getColorId() > 0) {
                 ok =  false;
-            } else {
-                ok = true;
             }
         }
         return ok;

@@ -92,7 +92,7 @@ public class Main extends Application {
     List<Gem> matches = new ArrayList<>();
 
     // The game Loop
-    GameTimer gameTimer = new GameTimer(800) {
+    GameTimer gameTimer = new GameTimer(600) {
         @Override
         public void game() {
             if (game) {
@@ -124,11 +124,12 @@ public class Main extends Application {
 
         // setting up the game controls. Using flags to restrict button use to specific screens
         scene.setOnKeyPressed((e) -> {
-            if (game && e.getCode().equals(KeyCode.S)) {
-                moveDown();
-                prevTimestamp = timestamp;
-                timestamp = System.currentTimeMillis();
-            }
+            //#FIXME method causes pieces to stack incorrect when a break happens.
+//            if (game && e.getCode().equals(KeyCode.S)) {
+//                moveDown();
+//                prevTimestamp = timestamp;
+//                timestamp = System.currentTimeMillis();
+//            }
 
             if (game && e.getCode().equals(KeyCode.SPACE)) {
                 if (!settingsPane.getDisableFX()) {
@@ -555,8 +556,8 @@ public class Main extends Application {
         //run later so that we execute this method on the current thread
         Platform.runLater(() -> {
 
-            // restart the timer if we are paused
-            if (paused) resume();
+
+
             // add all the current gems to the gems array
             gems.addAll(currentGems);
             currentGems.clear();
@@ -566,6 +567,9 @@ public class Main extends Application {
 
             // set the flag is falling to true
             isFalling = true;
+
+            // restart the timer if we are paused
+            if (paused) resume();
         });
     }
 
